@@ -39,7 +39,7 @@ sudo apt install postgresql
 6. Instalación de dBeaver:
 https://dbeaver.io/
 
-7. Instalar uv, python, FastAPI, servidor web (uvicorn) y sqlalchemy: 
+7. Instalar uv, python, FastAPI, servidor web (uvicorn), sqlalchemy y pyscopg2-binary: 
 ```bash
 # Instalar uv
 curl -LsSf https://astral.sh/uv/install.sh | sh 
@@ -51,6 +51,10 @@ uv init --python 3.12
 #Instalar FastAPI, Uvicorn y sqlalchemy:
 cd <carpeta_proyecto> 
 uv add fastapi uvicorn sqlalchemy
+
+#Instalar pyscopg2-binary: 
+cd <carpeta_proyecto>  
+uv add psycopg2-binary
 ```
 
 ## Ejecucion
