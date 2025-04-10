@@ -1,0 +1,48 @@
+<div class="mb-4 p-8 flex items-center justify-center">
+    <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
+
+        <ng-template #title><span>Iniciar Sesión</span></ng-template>
+        <ng-template #subtitle>Agregue sus datos:</ng-template>
+    
+        <form>
+            <p-floatlabel variant="in">
+                <input
+                    pInputText
+                    id="usuario"
+                    name="usuario"
+                    type="text"
+                    autocomplete="off"
+                    pSize="large"
+                    [(ngModel)]="user"
+                >
+                <label for="usuario">Usuario</label>
+            </p-floatlabel>
+            <br>
+            <p-floatlabel variant="in">
+                <input
+                    pInputText
+                    id="contrasena"
+                    name="contrasena"
+                    type="text"
+                    autocomplete="off"
+                    pSize="large"
+                    [(ngModel)]="password"
+                >
+                <label for="usuario">Contraseña</label>
+            </p-floatlabel>
+            <br>
+            <p-button
+                label="Ingresar"
+                severity="success"
+                class="w-full"
+                [outlined]="true"
+                styleClass="w-full"
+                type="submit"
+            />
+        </form>
+    
+    </p-card>
+</div>
+
+
+
