@@ -26,7 +26,6 @@ interface Usuario {
   styleUrl: './login.component.scss'
 })
 
-
 export class LoginComponent{
 
   user = ('');
@@ -56,32 +55,19 @@ export class LoginComponent{
       usuario: this.user,
       contrasena: this.password
     };
-    console.log('Datos enviados 1:', loginData);
-
     this.loginService.login(loginData).subscribe({
       next: (data:any) => {
-        console.log('Datos enviados 2:', data);
-        console.log(data.message);
-
-
-        
-        if (data.input === 200) {
-          console.log('Inicio de sesión exitoso');
+        if (data.status === 200) {
+          this.loginService.guardarToken(data.access_token);
+          this.clearForm();
           // Redirigir a la página de inicio o a otra página
-          // this.router.navigate(['/home']);
-        this.clearForm();
-        } else {
-          console.error('Error al iniciar sesión: Usuario o contraseña incorrectos 1');
+          //this.router.navigate(['/dashboard']);
         }
-      
+        alert(data.message);
       },
       error: (error) => {
-        console.error('Error al iniciar sesión: Usuario o contraseña incorrectos 2', error);
+        alert("Login failed");
       }
     })
-    
-
   }
-
-  
 }
