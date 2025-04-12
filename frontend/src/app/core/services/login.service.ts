@@ -11,12 +11,20 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  login(usuario: string, contrasena: string) {
-    const body = {
-      usuario: usuario,
-      contrasena: contrasena
-    };
-    return this.http.post(this.URLLogin, body);
-  }
+  login(loginData: any) {
+    // URLSearchParams() ayuda a enviar los datos en el formato correcto
+    const body = new URLSearchParams();
+    body.set('username', loginData.usuario);
+    body.set('password', loginData.contrasena);
 
+    // headers para enviar el tipo de contenido application/x-www-form-urlencoded como formulario encriptado
+    const headers = { 
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    // el metodo post envia los datos al servidor con el parametro body en texto plano
+    // el metodo post devuelve un observable
+    // el observable se puede subscribir para obtener la respuesta del servidor   
+    return this.http.post(this.URLLogin, body.toString(), { headers });
+  }
 }

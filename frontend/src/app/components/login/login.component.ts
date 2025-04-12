@@ -8,7 +8,7 @@ import { CardModule } from 'primeng/card';
 import { LoginService } from '../../core/services/login.service';
 
 interface Usuario {
-  usurio: string;
+  usuario: string;
   contrasena: string;
 }
 
@@ -52,10 +52,19 @@ export class LoginComponent{
 
   //metodo para iniciar sesion
   authLogin() {
-    this.loginService.login(this.user, this.password).subscribe({
+    const loginData: Usuario = {
+      usuario: this.user,
+      contrasena: this.password
+    };
+    console.log('Datos enviados 1:', loginData);
+
+    this.loginService.login(loginData).subscribe({
       next: (data:any) => {
+        console.log('Datos enviados 2:', data);
         console.log(data.message);
 
+
+        
         if (data.input === 200) {
           console.log('Inicio de sesión exitoso');
           // Redirigir a la página de inicio o a otra página
