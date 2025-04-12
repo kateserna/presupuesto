@@ -27,4 +27,16 @@ export class LoginService {
     // el observable se puede subscribir para obtener la respuesta del servidor   
     return this.http.post(this.URLLogin, body.toString(), { headers });
   }
+
+  guardarToken(token: string) {
+    localStorage.setItem('token', token);
+  }
+
+  obtenerToken() {
+    return localStorage.getItem('token');
+  }
+
+  existeToken(): boolean {
+    return !!this.obtenerToken();
+  }
 }
