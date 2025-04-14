@@ -5,7 +5,7 @@ App con base de datos de presupuesto usando JS, Python, Postgres y Angular.
 1. Instalación de node y npm:
 https://nodejs.org/en/download
 
-2. Instalación de angularCLI: 
+2. Instalación de angular: 
 ``` bash 
 # Instalar AngularCLI:
 npm install -g @angular/cli 
@@ -16,6 +16,9 @@ ng new <nombredelproyecto>
 # Responder las preguntas asi:
 # stylesheet: Sass (SCSS) 
 # Server - side rendering: No
+
+# Instalar Auth0 como proveedor de autenticacion:
+npm install @auth0/auth0-angular
 ```
 
 3. Instalación de librería de angular: Primeng: 
