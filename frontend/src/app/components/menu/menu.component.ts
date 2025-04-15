@@ -5,11 +5,13 @@ import { Menubar } from 'primeng/menubar';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '@auth0/auth0-angular';
+import { Popover } from 'primeng/popover';
+
 
 
 @Component({
   selector: 'app-menu',
-  imports: [CommonModule, Menubar, AvatarModule, ButtonModule],
+  imports: [CommonModule, Menubar, AvatarModule, ButtonModule, Popover],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
@@ -18,6 +20,7 @@ export class MenuComponent implements OnInit{
   public authService = inject(AuthService);
 
   items: MenuItem[] | undefined;
+  userMenu: MenuItem[] | undefined;
 
   ngOnInit(): void {
     console.log(this.authService); // vemos todo lo que trae el servicio
@@ -36,7 +39,7 @@ export class MenuComponent implements OnInit{
       },
       {
           label: 'Ingresar información',
-          icon: 'pi pi-star'
+          icon: 'pi pi-fw pi-plus'
       },
       {
           label: 'Detalle',
@@ -44,7 +47,7 @@ export class MenuComponent implements OnInit{
           items: [
               {
                   label: 'Activos',
-                  icon: 'pi pi-fw pi-plus'
+                  icon: 'pi pi-fw pi-pencil'
               },
               {
                   label: 'Pasivos',
@@ -62,7 +65,7 @@ export class MenuComponent implements OnInit{
       },
       {
           label: 'Resumen',
-          icon: 'pi pi-envelope'
+          icon: 'pi pi-wave-pulse'
       }
     ]
   }
