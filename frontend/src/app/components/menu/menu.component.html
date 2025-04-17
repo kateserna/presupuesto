@@ -2,17 +2,17 @@
     <p-menubar [model]="items">
         <ng-template #end>
             <div class="flex items-center gap-2">
-                <ng-container *ngIf="authService.user$ | async as user">
+                <ng-container *ngIf="authService.idTokenClaims$ | async as idTokenClaims">
                     <div>
                         <p-button severity="secondary" rounded [outlined]="false" (click)="op.toggle($event)">
-                            <p-avatar image="{{user.picture}}" shape="circle" />
+                            <p-avatar image="{{idTokenClaims.picture}}" shape="circle" />
                         </p-button>
                         <p-popover #op>
                             <div class="flex flex-col gap-4" justify-content="center" style="width: 200px">
                                 <div>
-                                    <span class="font-medium block mb-2">{{user.name}}</span>
+                                    <span class="font-medium block mb-2">{{idTokenClaims.name}}</span>
                                 <br>
-                                    <span class="font-bold">{{user.email}}</span>
+                                    <span class="font-bold">{{idTokenClaims.email}}</span>
                                 </div>
                                 <p-button 
                                     label="Logout" 
