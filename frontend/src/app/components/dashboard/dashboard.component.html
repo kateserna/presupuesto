@@ -4,7 +4,7 @@
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Activos</h2>
-                <p-table stripedRows [scrollable]="true" scrollHeight="400px">
+                <p-table [value]="allActivos()" [scrollable]="true" scrollHeight="400px">
                     <ng-template #header>
                         <tr>
                             <th>Fecha</th>
@@ -13,12 +13,12 @@
                             <th>Valor</th>
                         </tr>
                     </ng-template>
-                    <ng-template #body>
+                    <ng-template #body let-activos>
                         <tr>
-                            <!-- <td>{{activos.feha_transaccion}}</td>
+                            <td>{{activos.feha_transaccion}}</td>
                             <td>{{activos.categoria}}</td>
                             <td>{{activos.descripcion}}</td>
-                            <td>{{activos.valor}}</td> -->
+                            <td>{{activos.valor}}</td>
                         </tr>
 
                     </ng-template>

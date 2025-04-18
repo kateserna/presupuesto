@@ -36,9 +36,8 @@ class Usuario(BaseModel):
     contrasena: str
     fecha_creacion: datetime
 
-tokens = []
-
 # Abrir la conexión a la base de datos PostgreSQL
+#DATABASE_URL = "postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 DATABASE_URL = "postgresql://postgres:31109806@localhost/presupuestodb"
 engine = create_engine(DATABASE_URL)
 # Create the statement for the login query
@@ -49,6 +48,7 @@ stmt_login = sql.text("""
                       AND
                       contrasena = :pass_del_sqlalchemy
                       """)
+stmt_activos = sql.text("SELECT * FROM transacciones")
 
 """
 with engine.connect() as conn:
@@ -80,6 +80,18 @@ async def get_usuarios():
     """
     # Run a query to select all users
     return {"message": "Users retrieved successfully", "input": 200}
+
+#result = tabla de transcciones
+@app.get("/activos")
+async def get_activos():
+    with engine.connect() as conn:
+        result = conn.execute(
+            stmt_activos
+        ).fetchall()
+        print(result)
+        return result
+
+
 
 # endpoint para iniciar sesión, autenticar usuario con l nombre y contraseña proporconados
 @app.post("/login")
