@@ -4,7 +4,7 @@
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Activos</h2>
-                <p-table [value]="allActivos()" [scrollable]="true" scrollHeight="400px">
+                <p-table [value]="allActivos()" [scrollable]="true" scrollHeight="200px" panelSize="100%">
                     <ng-template #header>
                         <tr>
                             <th>Fecha</th>
@@ -15,8 +15,8 @@
                     </ng-template>
                     <ng-template #body let-activos>
                         <tr>
-                            <td>{{activos.feha_transaccion}}</td>
-                            <td>{{activos.categoria}}</td>
+                            <td>{{activos.fecha_transaccion}}</td>
+                            <td>{{activos.nombre_categoria}}</td>
                             <td>{{activos.descripcion}}</td>
                             <td>{{activos.valor}}</td>
                         </tr>

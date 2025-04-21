@@ -36,13 +36,14 @@ export class DashboardComponent implements OnInit{
 
   ngOnInit(): void {
     this.activosService.getAllActivos().subscribe((data: any) => {
-      this.listaActivos.set(data);
+      this.listaActivos.set(data.message);
+      console.log(data)
     });
   }
 
   //devuelve las transacciones (debe ser activos) de la tabla a traves del servicio
   allActivos = computed(() => {
-    console.log(this.listaActivos)
+    
     return this.listaActivos()
     
   })
