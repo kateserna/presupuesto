@@ -20,7 +20,6 @@ export class MenuComponent implements OnInit{
   public authService = inject(AuthService);
 
   items: MenuItem[] | undefined;
-  userMenu: MenuItem[] | undefined;
 
   ngOnInit(): void {
     console.log(this.authService); // vemos todo lo que trae el servicio
