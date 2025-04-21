@@ -3,7 +3,6 @@ CREATE TABLE usuario(
 id serial PRIMARY KEY,
 usuario VARCHAR(50) UNIQUE NOT NULL,
 correo_electronico VARCHAR(100) UNIQUE NOT NULL,
-contrasena VARCHAR(255) NOT null,
 fecha_creacion TIMESTAMP default CURRENT_TIMESTAMP
 );
 
@@ -19,9 +18,8 @@ tipo VARCHAR(50) NOT NULL
 -- Tabla Transacciones
 create table transacciones(
 id serial primary key,
-usuario_id BIGINT,
-tipo VARCHAR(50) NOT null,
-categoria_id BIGINT,
+usuario_id serial,
+categoria_id serial,
 valor DECIMAL(10,2) NOT null,
 fecha_transaccion TIMESTAMP NOT NULL,
 fecha_creacion TIMESTAMP default CURRENT_TIMESTAMP,
