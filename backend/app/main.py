@@ -1,8 +1,9 @@
 from datetime import datetime
-from fastapi import Depends, FastAPI
+import json
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from sqlalchemy import create_engine, sql, Column, Integer, String
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,6 +16,8 @@ origins = [
     "http://127.0.0.1",
     "http://localhost:4200",  # Example frontend URL
     "http://127.0.0.1:4200",  # Example frontend URL
+    "http://localhost:8000",  # Example frontend URL
+    "http://127.0.0.1:8000",
 ]
 
 app = FastAPI()
@@ -36,6 +39,16 @@ class Usuario(BaseModel):
     contrasena: str
     fecha_creacion: datetime
 
+class Transacciones(BaseModel):
+    usuario: str
+    correo_electronico: str
+    valor: int
+    fecha_transaccion: datetime
+    descripcion: Optional[str] 
+    nombre_categoria: str
+    tipo: str
+
+
 # Abrir la conexión a la base de datos PostgreSQL
 #DATABASE_URL = "postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 DATABASE_URL = "postgresql://postgres:31109806@localhost/presupuestodb"
@@ -48,7 +61,13 @@ stmt_login = sql.text("""
                       AND
                       contrasena = :pass_del_sqlalchemy
                       """)
-stmt_activos = sql.text("SELECT * FROM transacciones")
+stmt_activos = sql.text("""
+                        select usuario, correo_electronico, valor, fecha_transaccion, descripcion, nombre_categoria, tipo 
+                        from transacciones
+                        inner join categoria on categoria_id = categoria.id
+                        inner join usuario on usuario_id = usuario.id
+                        where tipo = 'activos';
+                        """)
 
 """
 with engine.connect() as conn:
@@ -84,12 +103,30 @@ async def get_usuarios():
 #result = tabla de transcciones
 @app.get("/activos")
 async def get_activos():
+    print(DATABASE_URL)
+
     with engine.connect() as conn:
-        result = conn.execute(
-            stmt_activos
-        ).fetchall()
-        print(result)
-        return result
+        result = conn.execute(stmt_activos).fetchall()
+
+        activos = []
+
+        for row in result:
+            activos.append(
+                Transacciones(
+                    usuario = row[0],
+                    correo_electronico = row[1],
+                    valor = row[2],
+                    fecha_transaccion = row[3],
+                    descripcion = row [4],
+                    nombre_categoria = row[5],
+                    tipo = row[6],
+                )
+            )
+        
+        if not activos:
+            raise HTTPException(status_code=404, detail="No activos found")
+        
+        return {"message": activos}
 
 
 
