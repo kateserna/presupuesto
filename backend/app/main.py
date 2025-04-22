@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 from dataclasses import dataclass
 
@@ -43,7 +43,7 @@ class resultado:
     result: str
     message: list
     status: int
-
+    total: int
 
 # Abrir la conexión a la base de datos PostgreSQL
 #DATABASE_URL = "postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
@@ -98,10 +98,12 @@ def abc(correo_electronico: str, tipo: str) -> resultado:
 
     # Check if the result is empty
     if len(result) == 0:
-        return resultado(f"No se encontraron {tipo}", [], 204)
+        return resultado(f"No se encontraron {tipo}", [], 204, 0)
 
     print(f"{tipo}:{result}.")
     lista_transacciones = []
+    total = 0
+
     for row in result:
         lista_transacciones.append(
             Transacciones(
@@ -114,8 +116,10 @@ def abc(correo_electronico: str, tipo: str) -> resultado:
                 tipo = row[6],
             )
         )
-    
-    return resultado(f"Se encontraron {len(lista_transacciones)} {tipo}", lista_transacciones, 200)
+        total += row[2]
+        
+    print("total:", total)
+    return resultado(f"Se encontraron {len(lista_transacciones)} {tipo}", lista_transacciones, 200, total)
 
 
 @app.get("/activos/{correo_electronico}")
