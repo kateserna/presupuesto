@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+from dataclasses import dataclass
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,6 +37,12 @@ class Transacciones(BaseModel):
     descripcion: Optional[str] 
     nombre_categoria: str
     tipo: str
+
+@dataclass
+class resultado:
+    result: str
+    message: list
+    status: int
 
 
 # Abrir la conexión a la base de datos PostgreSQL
@@ -84,105 +91,48 @@ with engine.connect() as conn:
         raise HTTPException(status_code=404, detail="No users found")
 """
 
-@app.get("/activos/{correo_electronico}")
-async def get_activos(correo_electronico: str):
+def abc(correo_electronico: str, tipo: str) -> resultado:
     with engine.connect() as conn:
         # TODO: corregir creacion del stmt para evitar concatenar
-        result = conn.execute(create_stmt(f"WHERE tipo = 'activos' AND correo_electronico = '{correo_electronico}'")).fetchall()
-        activos = []
-        for row in result:
-            activos.append(
-                Transacciones(
-                    usuario = row[0],
-                    correo_electronico = row[1],
-                    valor = row[2],
-                    fecha_transaccion = row[3],
-                    descripcion = row [4],
-                    nombre_categoria = row[5],
-                    tipo = row[6],
-                )
+        result = conn.execute(create_stmt(f"WHERE tipo = '{tipo}' AND correo_electronico = '{correo_electronico}'")).fetchall()
+
+    # Check if the result is empty
+    if len(result) == 0:
+        return resultado(f"No se encontraron {tipo}", [], 204)
+
+    print(f"{tipo}:{result}.")
+    lista_transacciones = []
+    for row in result:
+        lista_transacciones.append(
+            Transacciones(
+                usuario = row[0],
+                correo_electronico = row[1],
+                valor = row[2],
+                fecha_transaccion = row[3],
+                descripcion = row [4],
+                nombre_categoria = row[5],
+                tipo = row[6],
             )
-        
-        # Check if the result is empty
-        if not activos:
-            return {"message": "No se encontraron activos"}
-        print(correo_electronico)
-        return {"message": activos}
+        )
+    
+    return resultado(f"Se encontraron {len(lista_transacciones)} {tipo}", lista_transacciones, 200)
+
+
+@app.get("/activos/{correo_electronico}")
+async def get_activos(correo_electronico: str):
+    return abc(correo_electronico, "activos")
 
 @app.get("/pasivos/{correo_electronico}")
 async def get_pasivos(correo_electronico: str):
-    with engine.connect() as conn:
-        # TODO: corregir creacion del stmt para evitar concatenar
-        result = conn.execute(create_stmt(f"WHERE tipo = 'pasivos' AND correo_electronico = '{correo_electronico}'")).fetchall()
-        pasivos = []
-        for row in result:
-            pasivos.append(
-                Transacciones(
-                    usuario = row[0],
-                    correo_electronico = row[1],
-                    valor = row[2],
-                    fecha_transaccion = row[3],
-                    descripcion = row [4],
-                    nombre_categoria = row[5],
-                    tipo = row[6],
-                )
-            )
-        
-        # Check if the result is empty
-        if not pasivos:
-            return {"message": "No se encontraron pasivos"}
-        print(correo_electronico)
-        return {"message": pasivos}
+    return abc(correo_electronico, "pasivos")
 
 @app.get("/ingresos/{correo_electronico}")
 async def get_ingresos(correo_electronico: str):
-    with engine.connect() as conn:
-        # TODO: corregir creacion del stmt para evitar concatenar
-        result = conn.execute(create_stmt(f"WHERE tipo = 'ingresos' AND correo_electronico = '{correo_electronico}'")).fetchall()
-        ingresos = []
-        for row in result:
-            ingresos.append(
-                Transacciones(
-                    usuario = row[0],
-                    correo_electronico = row[1],
-                    valor = row[2],
-                    fecha_transaccion = row[3],
-                    descripcion = row [4],
-                    nombre_categoria = row[5],
-                    tipo = row[6],
-                )
-            )
-        
-        # Check if the result is empty
-        if not ingresos:
-            return {"message": "No se encontraron ingresos"}
-        print(correo_electronico)
-        return {"message": ingresos}
+    return abc(correo_electronico, "ingresos")
 
 @app.get("/egresos/{correo_electronico}")
 async def get_egresos(correo_electronico: str):
-    with engine.connect() as conn:
-        # TODO: corregir creacion del stmt para evitar concatenar
-        result = conn.execute(create_stmt(f"WHERE tipo = 'egresos' AND correo_electronico = '{correo_electronico}'")).fetchall()
-        egresos = []
-        for row in result:
-            egresos.append(
-                Transacciones(
-                    usuario = row[0],
-                    correo_electronico = row[1],
-                    valor = row[2],
-                    fecha_transaccion = row[3],
-                    descripcion = row [4],
-                    nombre_categoria = row[5],
-                    tipo = row[6],
-                )
-            )
-        
-        # Check if the result is empty
-        if not egresos:
-            return {"message": "No se encontraron egresos"}
-        print(correo_electronico)
-        return {"message": egresos}
+    return abc(correo_electronico, "egresos")
 
 # Ejecutar la aplicación FastAPI
 if __name__ == "__main__":
