@@ -84,10 +84,11 @@ with engine.connect() as conn:
         raise HTTPException(status_code=404, detail="No users found")
 """
 
-@app.get("/activos")
-async def get_activos():
+@app.get("/activos/{correo_electronico}")
+async def get_activos(correo_electronico: str):
     with engine.connect() as conn:
-        result = conn.execute(create_stmt("WHERE tipo = 'activos'")).fetchall()
+        # TODO: corregir creacion del stmt para evitar concatenar
+        result = conn.execute(create_stmt(f"WHERE tipo = 'activos' AND correo_electronico = '{correo_electronico}'")).fetchall()
         activos = []
         for row in result:
             activos.append(
@@ -105,7 +106,7 @@ async def get_activos():
         # Check if the result is empty
         if not activos:
             return {"message": "No se encontraron activos"}
-        
+        print(correo_electronico)
         return {"message": activos}
 
 

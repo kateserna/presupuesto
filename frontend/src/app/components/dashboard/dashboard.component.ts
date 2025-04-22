@@ -1,8 +1,10 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { SplitterModule } from 'primeng/splitter';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ActivosService } from '../../core/services/activos.service';
+import { AuthService } from '@auth0/auth0-angular';
+import { SharedService } from '../../core/services/shared.service';
 
 interface Transaccion{
   usuario: string;
@@ -10,7 +12,7 @@ interface Transaccion{
   fecha_transaccion: Date;
   tipo: string;
   nombre_categoria: string;
-  descripcion: string; //opcional
+  descripcion?: string; //opcional
   valor: number;
 }
 
@@ -30,22 +32,28 @@ interface Activos {
 })
 export class DashboardComponent implements OnInit{
 
+  constructor(private sharedService: SharedService, private activosService: ActivosService) {}
+
   listaActivos = signal<Transaccion[]>([]);
-  
-  constructor(private activosService: ActivosService){}
+  email: string = ""
 
   ngOnInit(): void {
-    this.activosService.getAllActivos().subscribe((data: any) => {
+    // this.activosService.getAllActivos().subscribe((data: any) => {
+    //   this.listaActivos.set(data.message);
+    //   console.log(data)
+    // });
+    this.email = this.sharedService.getEmail() ?? "";
+      console.log("correo:",this.email)
+
+    this.activosService.getAllActivosForUsuario(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
       console.log(data)
-    });
+    })
   }
 
   //devuelve las transacciones (debe ser activos) de la tabla a traves del servicio
   allActivos = computed(() => {
-    
     return this.listaActivos()
-    
   })
 
 

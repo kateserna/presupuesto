@@ -12,7 +12,12 @@ export class ActivosService {
 
   //obtener todos los activos
   //por ahora son todas las transacciones:
-  getAllActivos(){
-    return this.http.get(`${this.URLBase}/activos`)
+  // getAllActivos(){
+  //   return this.http.get(`${this.URLBase}/activos`)
+  // }
+
+  getAllActivosForUsuario(email:string){
+    console.log("email", email)
+    return this.http.get(`${this.URLBase}/activos/${email}`)
   }
 }
