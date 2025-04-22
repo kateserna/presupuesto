@@ -5,6 +5,7 @@ import { Menubar } from 'primeng/menubar';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '@auth0/auth0-angular';
+import { SharedService } from '../../core/services/shared.service';
 import { Popover } from 'primeng/popover';
 
 
@@ -21,10 +22,15 @@ export class MenuComponent implements OnInit{
 
   items: MenuItem[] | undefined;
 
+  constructor(private sharedService: SharedService) {}
+
   ngOnInit(): void {
     console.log(this.authService); // vemos todo lo que trae el servicio
     this.authService.idTokenClaims$.subscribe(claims => {
-      console.log('Token Claims:', claims); // vemos los claims del token
+      if (claims) {
+        console.log('Token Claims:', claims); // vemos los claims del token
+        this.sharedService.setEmail(claims.email ?? "");
+      }
     });
 
     this.authService.user$.subscribe(user => {
