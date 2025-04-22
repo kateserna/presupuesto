@@ -6,6 +6,8 @@ import { ActivosService } from '../../core/services/activos.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { SharedService } from '../../core/services/shared.service';
 import { PasivosService } from '../../core/services/pasivos.service';
+import { IngresosService } from '../../core/services/ingresos.service';
+import { EgresosService } from '../../core/services/egresos.service';
 
 interface Transaccion{
   usuario: string;
@@ -36,7 +38,9 @@ export class DashboardComponent implements OnInit{
   constructor(
     private sharedService: SharedService, 
     private activosService: ActivosService,
-    private pasivosService: PasivosService
+    private pasivosService: PasivosService,
+    private ingresosService: IngresosService,
+    private egresosService: EgresosService
   ) {}
 
   email: string = ""
@@ -61,15 +65,21 @@ export class DashboardComponent implements OnInit{
       this.listaPasivos.set(data.message);
       console.log("pasivos: ", data)
     })
+
+    this.ingresosService.getAllIngresos(this.email).subscribe( (data:any) => {
+      this.listaIngresos.set(data.menssage);
+      console.log("ingresos: ", data)
+    })
   }
 
-  //devuelve las transacciones (debe ser activos) de la tabla a traves del servicio
+  //devuelve las transacciones tipo activos de la tabla a traves del servicio
   allActivos = computed(() => {
     return this.listaActivos()
   })
 
   totalActivos = (0);
 
+  //devuelve los pasivos de la base de datos a traves del servicio
   allPasivos = computed( () => {
     return this.listaPasivos()
   })
@@ -78,6 +88,12 @@ export class DashboardComponent implements OnInit{
     this.totalActivos = this.listaActivos().reduce( (acc, curr) => acc + curr.valor, 0);
     return this.totalActivos
   })
+
+  allIngresos = computed( () => {
+    return this.listaIngresos()
+  })
+
+
 
 
 }

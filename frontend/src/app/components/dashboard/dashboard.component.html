@@ -48,7 +48,7 @@
 
                     </ng-template>
                 </p-table>
-                <!-- <h3>Total Pasivos: {{ totalActivos }}</h3> -->
+                <!-- <h3>Total Pasivos: {{ totalPasivos }}</h3> -->
             </div>
         </ng-template>
     </p-splitter>
@@ -60,6 +60,26 @@
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Ingresos</h2>
+                <p-table [value]="allIngresos()" [scrollable]="true" scrollHeight="200px" panelSize="100%">
+                    <ng-template #header>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Categoría</th>
+                            <th>Descripción</th>
+                            <th>Valor</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-ingresos>
+                        <tr>
+                            <td>{{ingresos.fecha_transaccion}}</td>
+                            <td>{{ingresos.nombre_categoria}}</td>
+                            <td>{{ingresos.descripcion}}</td>
+                            <td>{{ingresos.valor}}</td>
+                        </tr>
+
+                    </ng-template>
+                </p-table>
+                <!-- <h3>Total Ingresos: {{ totalIngresos}}</h3> -->
             </div>
         </ng-template>
         <ng-template #panel>
