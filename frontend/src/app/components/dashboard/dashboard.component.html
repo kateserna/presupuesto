@@ -85,6 +85,26 @@
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Egresos</h2>
+                <p-table [value]="allEgresos()" [scrollable]="true" scrollHeight="200px" panelSize="100%">
+                    <ng-template #header>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Categoría</th>
+                            <th>Descripción</th>
+                            <th>Valor</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-egresos>
+                        <tr>
+                            <td>{{egresos.fecha_transaccion}}</td>
+                            <td>{{egresos.nombre_categoria}}</td>
+                            <td>{{egresos.descripcion}}</td>
+                            <td>{{egresos.valor}}</td>
+                        </tr>
+
+                    </ng-template>
+                </p-table>
+                <!-- <h3>Total Egresos: {{ totalEgresos}}</h3> -->
             </div>
         </ng-template>
     </p-splitter>

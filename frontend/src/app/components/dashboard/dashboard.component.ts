@@ -70,6 +70,11 @@ export class DashboardComponent implements OnInit{
       this.listaIngresos.set(data.menssage);
       console.log("ingresos: ", data)
     })
+
+    this.egresosService.getAllEgresos(this.email).subscribe( ( data: any ) => {
+      this.listaEgresos.set(data.message);
+      console.log("egresos: ", data)
+    })
   }
 
   //devuelve las transacciones tipo activos de la tabla a traves del servicio
@@ -91,6 +96,10 @@ export class DashboardComponent implements OnInit{
 
   allIngresos = computed( () => {
     return this.listaIngresos()
+  })
+
+  allEgresos = computed( () => {
+    return this.listaEgresos()
   })
 
 
