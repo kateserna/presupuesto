@@ -23,12 +23,32 @@
 
                     </ng-template>
                 </p-table>
-                <!-- <h3>Total Activos: {{ totalActivos() }}</h3> -->
+                <h3>Total Activos: {{ totalActivos }}</h3>
             </div>
         </ng-template>
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Pasivos</h2>
+                <p-table [value]="allPasivos()" [scrollable]="true" scrollHeight="200px" panelSize="100%">
+                    <ng-template #header>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Categoría</th>
+                            <th>Descripción</th>
+                            <th>Valor</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-pasivos>
+                        <tr>
+                            <td>{{pasivos.fecha_transaccion}}</td>
+                            <td>{{pasivos.nombre_categoria}}</td>
+                            <td>{{pasivos.descripcion}}</td>
+                            <td>{{pasivos.valor}}</td>
+                        </tr>
+
+                    </ng-template>
+                </p-table>
+                <!-- <h3>Total Pasivos: {{ totalActivos }}</h3> -->
             </div>
         </ng-template>
     </p-splitter>

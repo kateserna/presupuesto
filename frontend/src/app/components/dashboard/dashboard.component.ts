@@ -5,6 +5,7 @@ import { TableModule } from 'primeng/table';
 import { ActivosService } from '../../core/services/activos.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { SharedService } from '../../core/services/shared.service';
+import { PasivosService } from '../../core/services/pasivos.service';
 
 interface Transaccion{
   usuario: string;
@@ -32,10 +33,17 @@ interface Activos {
 })
 export class DashboardComponent implements OnInit{
 
-  constructor(private sharedService: SharedService, private activosService: ActivosService) {}
+  constructor(
+    private sharedService: SharedService, 
+    private activosService: ActivosService,
+    private pasivosService: PasivosService
+  ) {}
 
-  listaActivos = signal<Transaccion[]>([]);
   email: string = ""
+  listaActivos = signal<Transaccion[]>([]);
+  listaPasivos = signal<Transaccion[]>([]);
+  listaIngresos = signal<Transaccion[]>([]);
+  listaEgresos = signal<Transaccion[]>([]);
 
   ngOnInit(): void {
     // this.activosService.getAllActivos().subscribe((data: any) => {
@@ -43,17 +51,32 @@ export class DashboardComponent implements OnInit{
     //   console.log(data)
     // });
     this.email = this.sharedService.getEmail() ?? "";
-      console.log("correo:",this.email)
 
     this.activosService.getAllActivosForUsuario(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
-      console.log(data)
+      console.log("activos: ",data)
+    })
+
+    this.pasivosService.getAllPasivos(this.email).subscribe( (data: any) => {
+      this.listaPasivos.set(data.message);
+      console.log("pasivos: ", data)
     })
   }
 
   //devuelve las transacciones (debe ser activos) de la tabla a traves del servicio
   allActivos = computed(() => {
     return this.listaActivos()
+  })
+
+  totalActivos = (0);
+
+  allPasivos = computed( () => {
+    return this.listaPasivos()
+  })
+
+  totalPatrimonio = computed( () => {
+    this.totalActivos = this.listaActivos().reduce( (acc, curr) => acc + curr.valor, 0);
+    return this.totalActivos
   })
 
 

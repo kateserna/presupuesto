@@ -109,6 +109,30 @@ async def get_activos(correo_electronico: str):
         print(correo_electronico)
         return {"message": activos}
 
+@app.get("/pasivos/{correo_electronico}")
+async def get_pasivos(correo_electronico: str):
+    with engine.connect() as conn:
+        # TODO: corregir creacion del stmt para evitar concatenar
+        result = conn.execute(create_stmt(f"WHERE tipo = 'pasivos' AND correo_electronico = '{correo_electronico}'")).fetchall()
+        pasivos = []
+        for row in result:
+            pasivos.append(
+                Transacciones(
+                    usuario = row[0],
+                    correo_electronico = row[1],
+                    valor = row[2],
+                    fecha_transaccion = row[3],
+                    descripcion = row [4],
+                    nombre_categoria = row[5],
+                    tipo = row[6],
+                )
+            )
+        
+        # Check if the result is empty
+        if not pasivos:
+            return {"message": "No se encontraron pasivos"}
+        print(correo_electronico)
+        return {"message": pasivos}
 
 # Ejecutar la aplicación FastAPI
 if __name__ == "__main__":
