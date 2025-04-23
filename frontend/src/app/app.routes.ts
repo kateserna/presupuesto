@@ -13,6 +13,11 @@ export const routes: Routes = [
         canActivate: [authGuard] // Protege la ruta de dashboard implementando el guard
     },
     {
+        path: 'add-info',
+        loadComponent: () => import('./components/add-info/add-info.component').then(m => m.AddInfoComponent),
+        canActivate: [authGuard]
+    },
+    {
         path: 'auth',
         loadComponent: () => import('./components/auth/auth.component').then(m => m.AuthComponent)
     },

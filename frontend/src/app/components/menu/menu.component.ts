@@ -40,11 +40,13 @@ export class MenuComponent implements OnInit{
     this.items = [
       {
           label: 'Home',
-          icon: 'pi pi-home'
+          icon: 'pi pi-home',
+          routerLink: 'dashboard'
       },
       {
           label: 'Ingresar información',
-          icon: 'pi pi-fw pi-plus'
+          icon: 'pi pi-fw pi-plus',
+          routerLink: 'add-info'
       },
       {
           label: 'Detalle',
