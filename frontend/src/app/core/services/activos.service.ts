@@ -10,13 +10,7 @@ export class ActivosService {
 
   constructor(private http: HttpClient) { }
 
-  //obtener todos los activos
-  //por ahora son todas las transacciones:
-  // getAllActivos(){
-  //   return this.http.get(`${this.URLBase}/activos`)
-  // }
-
-  getAllActivosForUsuario(email:string){
+  getAllActivos(email:string){
     console.log("email", email)
     return this.http.get(`${this.URLBase}/activos/${email}`)
   }
