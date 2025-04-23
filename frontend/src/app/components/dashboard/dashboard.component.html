@@ -2,10 +2,19 @@
 <div class="flex flex-col gap-4">
     <div class="justify-right">
         <p-floatlabel variant="in">
-            <p-datepicker [(ngModel)]="date" view="month" dateFormat="mm/yy" [readonlyInput]="true" showIcon="true" />
+            <p-datepicker 
+                [(ngModel)]="date"
+                view="month"
+                dateFormat="mm/yy"
+                [readonlyInput]="true"
+                showIcon="true"
+                inputId="filtroMes"
+                (ngModelChange)="updateDate($event)"
+            />
             <label for="filtroMes">Filtrar mes</label>
         </p-floatlabel>
     </div>
+    
     <br>
     <p-splitter [style]="{ height: '300px' }" styleClass="mb-8">
         
@@ -13,23 +22,26 @@
             <div class="flex items-center justify-center h-full">
                 <h2>Activos</h2>
                 <p-table [value]="allActivos()" [scrollable]="true" scrollHeight="200px">
-                    <ng-template #header>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Categoría</th>
-                            <th>Descripción</th>
-                            <th>Valor</th>
-                        </tr>
-                    </ng-template>
-                    <ng-template #body let-activos>
-                        <tr>
-                            <td>{{activos.fecha_transaccion}}</td>
-                            <td>{{activos.nombre_categoria}}</td>
-                            <td>{{activos.descripcion}}</td>
-                            <td>{{activos.valor | number: '1.0-2'}}</td>
-                        </tr>
-
-                    </ng-template>
+                    <!-- <p-column field="fecha_transaccion" header="Fecha" [filter]="true" filterType="date"> -->
+                        <ng-template #header>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Categoría</th>
+                                <th>Descripción</th>
+                                <th>Valor</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-activos>
+                            <tr>
+                                <td>{{activos.fecha_transaccion | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{activos.nombre_categoria}}</td>
+                                <td>{{activos.descripcion}}</td>
+                                <td>{{activos.valor | number: '1.0-2'}}</td>
+                            </tr>
+    
+                        </ng-template>
+                  
+                    
                 </p-table>
                 <h3>Total Activos: {{ totalActivos() | number: '1.0-2' }}</h3>
             </div>
@@ -121,7 +133,8 @@
         <h2>Flujo de caja: {{flujoDeCaja() | number: '1.0-2' }}</h2>
     </div>
     <div>
-        <p-button
+        <a >
+            <p-button
             label="Ingresar Información"
             icon="pi pi-plus"
             iconPos="left"
@@ -130,8 +143,12 @@
             [raised]="true"
             [outlined]="true"
             styleClass="w-full"
-            type="submit"
-        />
+            routerLink="/add-info"
+
+
+            />
+        </a>
+        
     </div>
 </div>
 

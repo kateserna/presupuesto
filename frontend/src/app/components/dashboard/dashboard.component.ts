@@ -10,7 +10,7 @@ import { EgresosService } from '../../core/services/egresos.service';
 import { FormsModule } from '@angular/forms';
 import { DatePicker } from 'primeng/datepicker';
 import { FloatLabel } from 'primeng/floatlabel';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, DatePipe } from '@angular/common';
 
 interface Transaccion{
   usuario: string;
@@ -39,11 +39,13 @@ interface Activos {
     FormsModule, 
     DatePicker, 
     FloatLabel,
-    DecimalPipe 
+    DecimalPipe, 
+    DatePipe 
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
+
 export class DashboardComponent implements OnInit{
 
   constructor(
@@ -54,7 +56,7 @@ export class DashboardComponent implements OnInit{
     private egresosService: EgresosService
   ) {}
   
-  date: (Date[] | undefined);
+  date = signal<Date | undefined>(undefined);
 
 
   email: string = ""
@@ -68,17 +70,13 @@ export class DashboardComponent implements OnInit{
   totalEgresos = signal(0);
 
   ngOnInit(): void {
-    // this.activosService.getAllActivos().subscribe((data: any) => {
-    //   this.listaActivos.set(data.message);
-    //   console.log(data)
-    // });
+
     this.email = this.sharedService.getEmail() ?? "";
 
-    this.activosService.getAllActivosForUsuario(this.email).subscribe((data:any) => {
+    this.activosService.getAllActivos(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
       this.totalActivos.set(data.total)
       console.log("activos: ",data)
-      console.log("total: ",data.total)
     })
 
     this.pasivosService.getAllPasivos(this.email).subscribe( (data: any) => {
@@ -100,17 +98,30 @@ export class DashboardComponent implements OnInit{
     })
   }
 
+  // Actualizacion de filtro fecha
+  updateDate(newDate: Date) {
+    const datePipe = new DatePipe('MM/yyyy');
+    this.date.set(newDate);
+    const dateMonth = datePipe.transform(this.date(), 'MM/yyyy')
+    console.log("Updated date 1:", this.date());
+    console.log("date transform:", dateMonth);
+
+  }
+
   //devuelve las transacciones tipo activos de la tabla a traves del servicio
   allActivos = computed(() => {
+    console.log("fecha transaccion:", this.listaActivos())
+    console.log("fecha filtro:", this.date()?.toDateString().split(" ")[1])
     return this.listaActivos()
+      //.filter(activos => activos.fecha_transaccion.getMonth() == this.date()?.getMonth())
+      
+
   })
 
   //devuelve los pasivos de la base de datos a traves del servicio
   allPasivos = computed( () => {
     return this.listaPasivos()
-      .filter(activos => activos.fecha_transaccion.getMonth()
       
-    )
   })
 
     allIngresos = computed( () => {
@@ -123,12 +134,5 @@ export class DashboardComponent implements OnInit{
   
   patrimonio = computed( () => this.totalActivos() - this.totalPasivos())
   flujoDeCaja = computed( () => this.totalIngresos() - this.totalEgresos())
-
-  filterMonth(month: Date){
-    this.date = [month];
-    console.log("filtro fecha:", month)
-    return this.date
-
-  }
 }
 
