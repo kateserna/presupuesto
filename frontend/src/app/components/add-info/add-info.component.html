@@ -1,1 +1,36 @@
-<p>add-info works!</p>
+<br>
+<p-card [style]="{ overflow: 'hidden' }">
+    <ng-template #title>Crear un registro</ng-template>
+    <ng-template #subtitle>Agregue la informacíon en el siguiente formulario:</ng-template>
+
+    <div class="grid grid-cols-2 gap-4">
+        <p>Sección:</p>
+        <p-select 
+            [options]="seccion" 
+            [(ngModel)]="tipoSeccion"
+            [checkmark]="true" 
+            optionLabel="name" 
+            [showClear]="true" 
+            placeholder="Seleccionar una sección" 
+            variant="filled"
+            class="w-full md:w-256"
+        />
+        <br>
+        <p>Categoria:</p>
+        <p-select 
+            [options]="categActivos"
+            [(ngModel)]="selectCatActivos" 
+            [checkmark]="true"
+            optionLabel="name" 
+            [showClear]="true" 
+            placeholder="Seleccionar categoría" 
+            variant="filled" 
+        />
+        </div>
+        <div>
+
+        </div>
+        <!-- @case () {} usar case para colocar la lista desplegable de por opcion de seccion-->
+
+
+</p-card>
