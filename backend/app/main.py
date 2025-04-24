@@ -138,6 +138,12 @@ async def get_ingresos(correo_electronico: str):
 async def get_egresos(correo_electronico: str):
     return abc(correo_electronico, "egresos")
 
+@app.post("/activos/", status_code=200)
+async def add_activos(activo: Transacciones):
+    lista_activos=[]
+    lista_activos.append(activo)
+    return {"mensaje":"Nuevo  activo"}
+
 # Ejecutar la aplicación FastAPI
 if __name__ == "__main__":
     run(app, host="0.0.0.0", port=8000)
