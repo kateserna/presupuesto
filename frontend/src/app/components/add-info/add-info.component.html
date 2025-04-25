@@ -1,36 +1,96 @@
 <br>
-<p-card [style]="{ overflow: 'hidden' }">
-    <ng-template #title>Crear un registro</ng-template>
-    <ng-template #subtitle>Agregue la informacíon en el siguiente formulario:</ng-template>
-
-    <div class="grid grid-cols-2 gap-4">
-        <p>Sección:</p>
-        <p-select 
-            [options]="seccion" 
-            [(ngModel)]="tipoSeccion"
-            [checkmark]="true" 
-            optionLabel="name" 
-            [showClear]="true" 
-            placeholder="Seleccionar una sección" 
-            variant="filled"
-            class="w-full md:w-256"
-        />
+<p-card>
+    <ng-template #title>Agregue un registro</ng-template>
+    <ng-template #subtitle>Agregue la información en el siguiente formulario:</ng-template>
+    <form (ngSubmit)="addTransaccion()">
+        <div class="card flex justify-center">
+            <p>Fecha de trasacción:</p>
+            <p-floatlabel variant="in">
+                <p-datepicker 
+                    [(ngModel)]="dateTransaccion"
+                    name="dateTransaccion"
+                    dateFormat="dd/mm/yy"
+                    [readonlyInput]="true"
+                    showIcon="true"
+                    inputId="dateTransaccion"
+                    (ngModelChange)="setDateTransaccion($event)"
+                />
+                <label for="dateTransaccion">Seleccionar fecha</label>
+            </p-floatlabel>
+        </div>
+    
+        <div class="grid grid-cols-2 gap-4">
+            <p>Sección:</p>
+            <p-select 
+                [options]="seccion" 
+                [(ngModel)]="tipoSeccion"
+                name="tipoSeccion"
+                [checkmark]="true" 
+                optionLabel="name" 
+                [showClear]="true" 
+                placeholder="Seleccionar una sección" 
+                variant="filled"
+                class="w-full md:w-256"
+                (ngModelChange)="setTipoSeccion($event)"
+            />
+            <br>
+            <p>Categoria:</p>
+            <p-select 
+                [options]="categActivos"
+                [(ngModel)]="selectCatActivos" 
+                name="selectCatActivos"
+                [checkmark]="true"
+                optionLabel="name" 
+                [showClear]="true" 
+                placeholder="Seleccionar categoría" 
+                variant="filled"
+                (ngModelChange)="setSelectCategActivos($event)" 
+            />
+            <!-- @case () {} usar case para colocar la lista desplegable de por opcion de seccion-->
+        </div>
         <br>
-        <p>Categoria:</p>
-        <p-select 
-            [options]="categActivos"
-            [(ngModel)]="selectCatActivos" 
-            [checkmark]="true"
-            optionLabel="name" 
-            [showClear]="true" 
-            placeholder="Seleccionar categoría" 
-            variant="filled" 
-        />
+        <div class="flex-auto">
+            <p>Valor:</p>
+            <p-floatlabel variant="in">
+                <p-inputnumber 
+                    inputId="valor"
+                    name="valor"
+                    autocomplete="off"
+                    [(ngModel)]="valor"
+                    (ngModelChange)="setValor($event)" 
+                /> 
+                <label for="valor">Ingrese el Valor</label>
+            </p-floatlabel>
         </div>
-        <div>
-
+        <br>
+        <div class="flex-auto"> 
+            <p>Ingrese una descripción:</p>
+            <p-floatlabel variant="in">
+                <input 
+                    pInputText
+                    id="descripcion"
+                    name="descripcion"
+                    type="text"
+                    autocomplete="off"
+                    [(ngModel)]="descripcion"
+                    (ngModelChange)="setDescrpcion($event)" 
+                >
+                <label for="descripcion">Descripción</label>
+            </p-floatlabel>
         </div>
-        <!-- @case () {} usar case para colocar la lista desplegable de por opcion de seccion-->
+        <br>
+        <p-button
+            label="Guardar"
+            severity="success"
+            class="w-full"
+            [raised]="true"
+            [outlined]="true"
+            styleClass="w-full"
+            type="submit"
+        /> 
+    </form>
+        
+      
 
 
 </p-card>

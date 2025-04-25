@@ -14,4 +14,8 @@ export class ActivosService {
     console.log("email", email)
     return this.http.get(`${this.URLBase}/activos/${email}`)
   }
+
+  createActivos(activo: any){
+    return this.http.post(`${this.URLBase}/activos`,activo)
+  }
 }

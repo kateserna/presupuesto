@@ -1,25 +1,64 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { SharedService } from '../../core/services/shared.service';
 import { FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { CardModule } from 'primeng/card';
 import { FloatLabel } from "primeng/floatlabel"
+import { InputNumber } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { DatePickerModule } from 'primeng/datepicker';
+import { ButtonModule } from 'primeng/button';
+import { PasivosService } from '../../core/services/pasivos.service';
+import { IngresosService } from '../../core/services/ingresos.service';
+import { ActivosService } from '../../core/services/activos.service';
+import { EgresosService } from '../../core/services/egresos.service';
 
 interface Opciones {
   name: string;
 }
+
+interface Transaccion{
+  email: string;
+  fecha_transaccion: Date;
+  tipo: string;
+  nombre_categoria: string;
+  descripcion?: string; //opcional
+  valor: number;
+}
+
 @Component({
   selector: 'app-add-info',
   imports: [
     FormsModule,
     Select,
     CardModule,
-    FloatLabel 
+    FloatLabel,
+    InputNumber,
+    InputTextModule,
+    DatePickerModule,
+    ButtonModule
   ],
   templateUrl: './add-info.component.html',
   styleUrl: './add-info.component.scss'
 })
 
 export class AddInfoComponent implements OnInit {
+  constructor(
+      private sharedService: SharedService, 
+      private activosService: ActivosService,
+      private pasivosService: PasivosService,
+      private ingresosService: IngresosService,
+      private egresosService: EgresosService
+    ) {}
+
+  email: string = ""
+  listaActivos = signal<Transaccion[]>([]);
+  listaPasivos = signal<Transaccion[]>([]);
+  listaIngresos = signal<Transaccion[]>([]);
+  listaEgresos = signal<Transaccion[]>([]);
+
+  dateTransaccion: Date | undefined;
+
   //Seccion: Activos, Pasivos, Ingresos, Egresos
   seccion: Opciones[] | undefined;
   tipoSeccion: Opciones | undefined;
@@ -29,28 +68,100 @@ export class AddInfoComponent implements OnInit {
   selectCatActivos: Opciones | undefined;
 
 
-//crear el resto de categorias por seccion
+  //crear el resto de categorias por seccion
 
+  valor: number | undefined;
+  descripcion = ('');
+  
 
-    ngOnInit() {
-        this.seccion = [
-            { name: 'Activos' },
-            { name: 'Pasivos' },
-            { name: 'Ingresos' },
-            { name: 'Egresos' },
-        ];
+  ngOnInit() {
 
-        this.categActivos = [
-            { name: 'Ingresos' },
-            { name: 'Ahorro' },
-            { name: 'Negocio' },
-            { name: 'Inversión' },
-            { name: 'Bienes Raices' },
-            { name: 'Otro' },
-        ];
+    this.email = this.sharedService.getEmail() ?? "";
 
-        //crear demas categorias por seccion
-        
-    }
+    this.seccion = [
+      { name: 'Activos' },
+      { name: 'Pasivos' },
+      { name: 'Ingresos' },
+      { name: 'Egresos' },
+    ];
+
+    this.categActivos = [
+      { name: 'Ingresos' },
+      { name: 'Ahorro' },
+      { name: 'Negocio' },
+      { name: 'Inversión' },
+      { name: 'Bienes Raices' },
+      { name: 'Otro' },
+    ];
+
+    //crear demas categorias por seccion
+
+  }
+
+  //revisar metdo fecha si este dando
+  setDateTransaccion(dateTransaccion: Date){
+    this.dateTransaccion = dateTransaccion;
+    console.log("fecha transaccion: ", this.dateTransaccion)
+
+  }
+
+  setTipoSeccion(tipoSeccion: Opciones){
+    this.tipoSeccion = tipoSeccion;
+    console.log("tipo: ", this.tipoSeccion)
+  }
+
+  setSelectCategActivos(selectCatActivos: Opciones){
+    this.selectCatActivos = selectCatActivos
+    console.log("categoria activo: ", this.selectCatActivos)
+  }
+
+  setValor(valor:number){
+    this.valor = valor;
+    console.log("valor: ", this.valor)
+  }
+
+  setDescrpcion(descripcion:string){
+    this.descripcion = descripcion;
+    console.log("descripción: ", this.descripcion)
+  }
+
+  //metodo para limpiar el formulario
+  clearForm(){
+    this.dateTransaccion = undefined;
+    this.tipoSeccion = undefined;
+    this.selectCatActivos = undefined;
+    this.valor = 0;
+    this.descripcion = '';
+  }
+
+  //metodo para crear registro:
+  addTransaccion(){
+    const newTransaccion: Transaccion ={
+      email: this.email,
+      fecha_transaccion: this.dateTransaccion ?? new Date(),
+      tipo: this.tipoSeccion?.name ?? '',
+      nombre_categoria: this.selectCatActivos?.name ?? '',
+      descripcion: this.descripcion, //opcional
+      valor: this.valor ?? 0
+
+    };
+
+    //verificacion del resultado de la petición
+    const result = this.activosService.createActivos(newTransaccion).subscribe({
+      next: (data: any) => {
+        this.listaActivos.update((historial:Transaccion[]) => {
+          console.log("Nuevo registro activos:", newTransaccion)
+          return [...historial, newTransaccion];
+        }
+      );
+      alert("Producto creado correctamente");
+      this.clearForm();
+      },
+      error: (err: any) => {
+      alert("Error al crear el registro: " + err.error.message);
+      }
+      
+    });
+  }
 
 }
