@@ -18,7 +18,8 @@ interface Opciones {
 }
 
 interface Transaccion{
-  email: string;
+  usuario: string
+  correo_electronico: string;
   fecha_transaccion: Date;
   tipo: string;
   nombre_categoria: string;
@@ -52,6 +53,7 @@ export class AddInfoComponent implements OnInit {
     ) {}
 
   email: string = ""
+  usuario: string = ""
   listaActivos = signal<Transaccion[]>([]);
   listaPasivos = signal<Transaccion[]>([]);
   listaIngresos = signal<Transaccion[]>([]);
@@ -77,6 +79,7 @@ export class AddInfoComponent implements OnInit {
   ngOnInit() {
 
     this.email = this.sharedService.getEmail() ?? "";
+    this.usuario = this.sharedService.getUsuario() ?? "";
 
     this.seccion = [
       { name: 'Activos' },
@@ -137,7 +140,8 @@ export class AddInfoComponent implements OnInit {
   //metodo para crear registro:
   addTransaccion(){
     const newTransaccion: Transaccion ={
-      email: this.email,
+      usuario: this.usuario,
+      correo_electronico: this.email,
       fecha_transaccion: this.dateTransaccion ?? new Date(),
       tipo: this.tipoSeccion?.name ?? '',
       nombre_categoria: this.selectCatActivos?.name ?? '',
