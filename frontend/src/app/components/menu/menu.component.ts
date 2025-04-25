@@ -65,11 +65,13 @@ export class MenuComponent implements OnInit{
               },
               {
                 label: 'Ingresos',
-                icon: 'pi pi-fw pi-pencil'
+                icon: 'pi pi-fw pi-pencil',
+                routerLink: 'ingresos'
               },
               {
                 label: 'Egresos',
-                icon: 'pi pi-fw pi-pencil'
+                icon: 'pi pi-fw pi-pencil',
+                routerLink: 'egresos'
               }
             ]
       },

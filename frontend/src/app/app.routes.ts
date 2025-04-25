@@ -28,6 +28,16 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'ingresos',
+        loadComponent: () => import('./components/ingresos/ingresos.component').then(m => m.IngresosComponent),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'egresos',
+        loadComponent: () => import('./components/egresos/egresos.component').then(m => m.EgresosComponent),
+        canActivate: [authGuard]
+    },
+    {
         path: 'auth',
         loadComponent: () => import('./components/auth/auth.component').then(m => m.AuthComponent)
     },
