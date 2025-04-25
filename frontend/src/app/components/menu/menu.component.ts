@@ -55,7 +55,8 @@ export class MenuComponent implements OnInit{
           items: [
               {
                   label: 'Activos',
-                  icon: 'pi pi-fw pi-pencil'
+                  icon: 'pi pi-fw pi-pencil',
+                  routerLink: 'activos'
               },
               {
                   label: 'Pasivos',

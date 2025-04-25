@@ -18,6 +18,11 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'activos',
+        loadComponent: () => import('./components/activos/activos.component').then(m => m.ActivosComponent),
+        canActivate: [authGuard]
+    },
+    {
         path: 'auth',
         loadComponent: () => import('./components/auth/auth.component').then(m => m.AuthComponent)
     },
