@@ -30,6 +30,7 @@ export class MenuComponent implements OnInit{
       if (claims) {
         console.log('Token Claims:', claims); // vemos los claims del token
         this.sharedService.setEmail(claims.email ?? "");
+        this.sharedService.setUsuario(claims.name ?? "");
       }
     });
 
