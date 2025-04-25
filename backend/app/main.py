@@ -50,7 +50,7 @@ class resultado:
 DATABASE_URL = "postgresql://postgres:31109806@localhost/presupuestodb"
 engine = create_engine(DATABASE_URL)
 
-def create_stmt(filter = ""):
+def create_stmt_select(filter = ""):
     basic_stmt = """
                 SELECT usuario, correo_electronico, valor, fecha_transaccion, descripcion, nombre_categoria, tipo 
                 FROM transacciones
@@ -58,6 +58,28 @@ def create_stmt(filter = ""):
                 INNER JOIN usuario ON usuario_id = usuario.id 
                 """
     return sql.text(basic_stmt + filter)
+
+def create_stmt_insert(correo_electronico:str, nombre_categoria:str, tipo:str, valor:int, fecha_transaccion: date, descripcion: str):
+    basic_stmt =f"""
+                INSERT INTO transacciones(
+                    id,
+                    usuario_id,
+                    categoria_id,
+                    valor,
+                    fecha_transaccion,
+                    fecha_creacion,
+                    descripcion)
+                values(
+                    (select max(id)+1 as id from transacciones),
+                    (select id from usuario where correo_electronico = '{correo_electronico}' limit 1),
+                    (select id from categoria where nombre_categoria = '{nombre_categoria}' and tipo = '{tipo}' limit 1),
+                    {valor},
+                    '{fecha_transaccion}',
+                    CURRENT_TIMESTAMP,
+                    '{descripcion}');
+
+                """
+    return sql.text(basic_stmt)
 
 
 """
@@ -94,7 +116,7 @@ with engine.connect() as conn:
 def abc(correo_electronico: str, tipo: str) -> resultado:
     with engine.connect() as conn:
         # TODO: corregir creacion del stmt para evitar concatenar
-        result = conn.execute(create_stmt(f"WHERE tipo = '{tipo}' AND correo_electronico = '{correo_electronico}'")).fetchall()
+        result = conn.execute(create_stmt_select(f"WHERE tipo = '{tipo}' AND correo_electronico = '{correo_electronico}'")).fetchall()
 
     # Check if the result is empty
     if len(result) == 0:
@@ -138,10 +160,20 @@ async def get_ingresos(correo_electronico: str):
 async def get_egresos(correo_electronico: str):
     return abc(correo_electronico, "egresos")
 
-@app.post("/activos/", status_code=200)
-async def add_activos(activo: Transacciones):
-    lista_activos=[]
-    lista_activos.append(activo)
+@app.post("/transacciones/", status_code=200)
+async def add_activos(transaccion: Transacciones):
+    print(transaccion)
+    print(engine)
+
+    with engine.connect() as conn:
+        # TODO: corregir creacion del stmt para evitar concatenar
+        sql = create_stmt_insert(transaccion.correo_electronico, transaccion.nombre_categoria, transaccion.tipo, transaccion.valor, transaccion.fecha_transaccion, transaccion.descripcion)
+        result = conn.execute(sql)
+        conn.commit()
+    print("Este es el resultado:",result)
+
+    # Agregar conexión y sql aquí
+
     return {"mensaje":"Nuevo  activo"}
 
 # Ejecutar la aplicación FastAPI
