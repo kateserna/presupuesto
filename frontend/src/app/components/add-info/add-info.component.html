@@ -35,17 +35,44 @@
             />
             <br>
             <p>Categoria:</p>
-            <p-select 
-                [options]="categActivos"
-                [(ngModel)]="selectCatActivos" 
-                name="selectCatActivos"
-                [checkmark]="true"
-                optionLabel="name" 
-                [showClear]="true" 
-                placeholder="Seleccionar categoría" 
-                variant="filled"
-                (ngModelChange)="setSelectCategActivos($event)" 
-            />
+            <!-- @switch (tipoSeccion) {
+                @case ({ name: 'Activos' }) { -->
+                    <div>
+                        <p-select 
+                        [options]="categActivos"
+                        [(ngModel)]="selectCatActivos" 
+                        name="selectCatActivos"
+                        [checkmark]="true"
+                        optionLabel="name" 
+                        [showClear]="true" 
+                        placeholder="Seleccionar categoría" 
+                        variant="filled"
+                        (ngModelChange)="setSelectCategActivos($event)" 
+                    />
+                    </div>
+                   
+                <!-- }
+                @case ({ name: 'Pasivos' }) { -->
+                <!-- modificar el metodo de categoria pasivos -->
+                    <p-select 
+                        [options]="categPasivos"
+                        [(ngModel)]="selectCatActivos" 
+                        name="selectCatActivos"
+                        [checkmark]="true"
+                        optionLabel="name" 
+                        [showClear]="true" 
+                        placeholder="Seleccionar categoría" 
+                        variant="filled"
+                        (ngModelChange)="setSelectCategActivos($event)" 
+                    />
+                <!-- }
+                
+            } -->
+            
+            
+            
+
+
             <!-- @case () {} usar case para colocar la lista desplegable de por opcion de seccion-->
         </div>
         <br>

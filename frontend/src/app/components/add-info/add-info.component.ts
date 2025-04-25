@@ -65,9 +65,14 @@ export class AddInfoComponent implements OnInit {
   seccion: Opciones[] | undefined;
   tipoSeccion: Opciones | undefined;
 
-  //Categoria Ingresos:
+  //Categoria Activos:
   categActivos: Opciones[] | undefined;
   selectCatActivos: Opciones | undefined;
+
+  categPasivos: Opciones[] | undefined;
+  selectCatPasivos: Opciones | undefined;
+
+  
 
 
   //crear el resto de categorias por seccion
@@ -97,6 +102,18 @@ export class AddInfoComponent implements OnInit {
       { name: 'Otro' },
     ];
 
+    this.categPasivos = [
+      { name: 'Tarjeta de crédito' },
+      { name: 'Carro' },
+      { name: 'Préstamo bancario' },
+      { name: 'Hipoteca de la casa' },
+      { name: 'Hipoteca de Bienes raíces' },
+      { name: 'Obligaciones de negocios' },
+      { name: 'Inversiones' },
+      { name: 'Gastos Básicos' },
+      { name: 'Otro' },
+    ];
+
     //crear demas categorias por seccion
 
   }
@@ -109,12 +126,13 @@ export class AddInfoComponent implements OnInit {
   }
 
   setTipoSeccion(tipoSeccion: Opciones){
-    this.tipoSeccion = tipoSeccion;
+    //this.tipoSeccion = tipoSeccion;
+    this.tipoSeccion = { name: tipoSeccion.name.toLowerCase() };
     console.log("tipo: ", this.tipoSeccion)
   }
 
   setSelectCategActivos(selectCatActivos: Opciones){
-    this.selectCatActivos = selectCatActivos
+    this.selectCatActivos = {name: selectCatActivos.name.toLowerCase()}
     console.log("categoria activo: ", this.selectCatActivos)
   }
 
