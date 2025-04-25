@@ -122,7 +122,7 @@ export class DashboardComponent implements OnInit{
       
   })
 
-    allIngresos = computed( () => {
+  allIngresos = computed( () => {
     return this.listaIngresos()
   })
 
