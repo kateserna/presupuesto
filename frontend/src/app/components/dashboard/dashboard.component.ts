@@ -114,8 +114,6 @@ export class DashboardComponent implements OnInit{
     console.log("fecha filtro:", this.date()?.toDateString().split(" ")[1])
     return this.listaActivos()
       //.filter(activos => activos.fecha_transaccion.getMonth() == this.date()?.getMonth())
-      
-
   })
 
   //devuelve los pasivos de la base de datos a traves del servicio
