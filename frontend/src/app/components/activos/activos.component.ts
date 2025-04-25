@@ -21,7 +21,8 @@ interface Transaccion{
     TableModule,
     CardModule,
     DecimalPipe, 
-    DatePipe ],
+    DatePipe 
+  ],
   templateUrl: './activos.component.html',
   styleUrl: './activos.component.scss'
 })

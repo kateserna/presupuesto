@@ -1,0 +1,26 @@
+<div class="flex items-center justify-center h-full">
+    <p-card [style]="{ overflow: 'hidden' }">
+        <h2>Lista de Pasivos</h2>
+    <p-table [value]="allPasivos()" [scrollable]="true" scrollHeight="400px" panelSize="100%">
+        <ng-template #header>
+            <tr>
+                <th>Fecha</th>
+                <th>Categoría</th>
+                <th>Descripción</th>
+                <th>Valor</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-pasivos>
+            <tr>
+                <td>{{pasivos.fecha_transaccion | date: 'dd/MM/yyyy'}}</td>
+                <td>{{pasivos.nombre_categoria}}</td>
+                <td>{{pasivos.descripcion}}</td>
+                <td>{{pasivos.valor | number: '1.0-2'}}</td>
+            </tr>
+
+        </ng-template>
+    </p-table>
+    <h3>Total Pasivos: {{ totalPasivos() | number: '1.0-2' }}</h3>
+    </p-card>
+    
+</div>

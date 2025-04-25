@@ -60,7 +60,8 @@ export class MenuComponent implements OnInit{
               },
               {
                   label: 'Pasivos',
-                  icon: 'pi pi-fw pi-pencil'
+                  icon: 'pi pi-fw pi-pencil',
+                  routerLink: 'pasivos'
               },
               {
                 label: 'Ingresos',

@@ -23,6 +23,11 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'pasivos',
+        loadComponent: () => import('./components/pasivos/pasivos.component').then(m => m.PasivosComponent),
+        canActivate: [authGuard]
+    },
+    {
         path: 'auth',
         loadComponent: () => import('./components/auth/auth.component').then(m => m.AuthComponent)
     },
