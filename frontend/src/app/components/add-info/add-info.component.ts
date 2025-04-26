@@ -65,17 +65,18 @@ export class AddInfoComponent implements OnInit {
   seccion: Opciones[] | undefined;
   tipoSeccion: Opciones | undefined;
 
-  //Categoria Activos:
+  //Listados de categorias:
   categActivos: Opciones[] | undefined;
   selectCatActivos: Opciones | undefined;
 
   categPasivos: Opciones[] | undefined;
   selectCatPasivos: Opciones | undefined;
 
-  
+  categIngresos: Opciones[] | undefined;
+  selectCatIngresos: Opciones | undefined;
 
-
-  //crear el resto de categorias por seccion
+  categEgresos: Opciones[] | undefined;
+  selectCatEgresos: Opciones | undefined;
 
   valor: number | undefined;
   descripcion = ('');
@@ -86,6 +87,7 @@ export class AddInfoComponent implements OnInit {
     this.email = this.sharedService.getEmail() ?? "";
     this.usuario = this.sharedService.getUsuario() ?? "";
 
+    //opciones de seccion:
     this.seccion = [
       { name: 'activos' },
       { name: 'pasivos' },
@@ -93,6 +95,7 @@ export class AddInfoComponent implements OnInit {
       { name: 'egresos' },
     ];
 
+    //opciones de categorias:
     this.categActivos = [
       { name: 'ingresos' },
       { name: 'ahorro' },
@@ -114,7 +117,29 @@ export class AddInfoComponent implements OnInit {
       { name: 'otro' },
     ];
 
-    //crear demas categorias por seccion
+    this.categIngresos = [
+      { name: 'salario' },
+      { name: 'cdt' },
+      { name: 'dividendos' },
+      { name: 'bienes raíces' },
+      { name: 'negocios' },
+      { name: 'otro' },
+    ];
+
+    this.categEgresos = [
+      { name: 'servicios públicos' },
+      { name: 'tarjeta de crédito' },
+      { name: 'salud' },
+      { name: 'alimentación' },
+      { name: 'arriendo' },
+      { name: 'carro o transporte' },
+      { name: 'varios' },
+      { name: 'personal' },
+      { name: 'entretenimiento' },
+      { name: 'mascotas' },
+      { name: 'inversion / negocio' },
+      { name: 'otro' },
+    ];
 
   }
 
@@ -139,6 +164,16 @@ export class AddInfoComponent implements OnInit {
   setSelectCategPasivos(selectCatPasivos: Opciones){
     this.selectCatPasivos = selectCatPasivos
     console.log("categoria activo: ", this.selectCatPasivos)
+  }
+
+  setSelectCategIngresos(selectCatIngresos: Opciones){
+    this.selectCatIngresos = selectCatIngresos
+    console.log("categoria activo: ", this.selectCatIngresos)
+  }
+
+  setSelectCategEgresos(selectCatEgresos: Opciones){
+    this.selectCatEgresos = selectCatEgresos
+    console.log("categoria activo: ", this.selectCatEgresos)
   }
 
   setValor(valor:number){

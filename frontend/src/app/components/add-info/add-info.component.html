@@ -34,9 +34,9 @@
                 (ngModelChange)="setTipoSeccion($event)"
             />
             <br>
-            <p>Categoria:</p>
+            <p>Categoría:</p>
             @switch (tipoSeccion) {
-                @case ({ name: 'Activos' }) {
+                @case ({ name:'activos' }) {
                     <div>
                         <p-select 
                         [options]="categActivos"
@@ -50,19 +50,46 @@
                         (ngModelChange)="setSelectCategActivos($event)" 
                     />
                     </div>
-                   
                 }
-                @case ({ name: 'Pasivos' }) {
+                @case ({ name: 'pasivos' }) {
                     <p-select 
                         [options]="categPasivos"
-                        [(ngModel)]="selectCatActivos" 
-                        name="selectCatActivos"
+                        [(ngModel)]="selectCatPasivos" 
+                        name="selectCatPasivos"
                         [checkmark]="true"
                         optionLabel="name" 
                         [showClear]="true" 
                         placeholder="Seleccionar categoría" 
                         variant="filled"
                         (ngModelChange)="setSelectCategPasivos($event)" 
+                    />
+                }
+
+                @case ({ name: 'ingresos' }) {
+                    <p-select 
+                        [options]="categIngresos"
+                        [(ngModel)]="selectCatIngresos" 
+                        name="selectCatIngresos"
+                        [checkmark]="true"
+                        optionLabel="name" 
+                        [showClear]="true" 
+                        placeholder="Seleccionar categoría" 
+                        variant="filled"
+                        (ngModelChange)="setSelectCategIngresos($event)" 
+                    />
+                }
+
+                @case ({ name: 'egresos' }) {
+                    <p-select 
+                        [options]="categEgresos"
+                        [(ngModel)]="selectCatEgresos" 
+                        name="selectCatEgresos"
+                        [checkmark]="true"
+                        optionLabel="name" 
+                        [showClear]="true" 
+                        placeholder="Seleccionar categoría" 
+                        variant="filled"
+                        (ngModelChange)="setSelectCategEgresos($event)" 
                     />
                 }
                 
