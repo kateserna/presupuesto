@@ -87,31 +87,31 @@ export class AddInfoComponent implements OnInit {
     this.usuario = this.sharedService.getUsuario() ?? "";
 
     this.seccion = [
-      { name: 'Activos' },
-      { name: 'Pasivos' },
-      { name: 'Ingresos' },
-      { name: 'Egresos' },
+      { name: 'activos' },
+      { name: 'pasivos' },
+      { name: 'ingresos' },
+      { name: 'egresos' },
     ];
 
     this.categActivos = [
-      { name: 'Ingresos' },
-      { name: 'Ahorro' },
-      { name: 'Negocio' },
-      { name: 'Inversión' },
-      { name: 'Bienes Raices' },
-      { name: 'Otro' },
+      { name: 'ingresos' },
+      { name: 'ahorro' },
+      { name: 'negocio' },
+      { name: 'inversión' },
+      { name: 'bienes raices' },
+      { name: 'otro' },
     ];
 
     this.categPasivos = [
-      { name: 'Tarjeta de crédito' },
-      { name: 'Carro' },
-      { name: 'Préstamo bancario' },
-      { name: 'Hipoteca de la casa' },
-      { name: 'Hipoteca de Bienes raíces' },
-      { name: 'Obligaciones de negocios' },
-      { name: 'Inversiones' },
-      { name: 'Gastos Básicos' },
-      { name: 'Otro' },
+      { name: 'tarjeta de crédito' },
+      { name: 'carro' },
+      { name: 'préstamo bancario' },
+      { name: 'hipoteca de la casa' },
+      { name: 'hipoteca de bienes raíces' },
+      { name: 'obligaciones de negocios' },
+      { name: 'inversiones' },
+      { name: 'gastos básicos' },
+      { name: 'otro' },
     ];
 
     //crear demas categorias por seccion
@@ -127,13 +127,18 @@ export class AddInfoComponent implements OnInit {
 
   setTipoSeccion(tipoSeccion: Opciones){
     //this.tipoSeccion = tipoSeccion;
-    this.tipoSeccion = { name: tipoSeccion.name.toLowerCase() };
+    this.tipoSeccion = tipoSeccion;
     console.log("tipo: ", this.tipoSeccion)
   }
 
   setSelectCategActivos(selectCatActivos: Opciones){
-    this.selectCatActivos = {name: selectCatActivos.name.toLowerCase()}
+    this.selectCatActivos = selectCatActivos
     console.log("categoria activo: ", this.selectCatActivos)
+  }
+
+  setSelectCategPasivos(selectCatPasivos: Opciones){
+    this.selectCatPasivos = selectCatPasivos
+    console.log("categoria activo: ", this.selectCatPasivos)
   }
 
   setValor(valor:number){
@@ -169,7 +174,7 @@ export class AddInfoComponent implements OnInit {
     };
 
     //verificacion del resultado de la petición
-    const result = this.activosService.createActivos(newTransaccion).subscribe({
+    const result = this.activosService.createTransaccion(newTransaccion).subscribe({
       next: (data: any) => {
         this.listaActivos.update((historial:Transaccion[]) => {
           console.log("Nuevo registro activos:", newTransaccion)

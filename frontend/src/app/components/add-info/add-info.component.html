@@ -35,8 +35,8 @@
             />
             <br>
             <p>Categoria:</p>
-            <!-- @switch (tipoSeccion) {
-                @case ({ name: 'Activos' }) { -->
+            @switch (tipoSeccion) {
+                @case ({ name: 'Activos' }) {
                     <div>
                         <p-select 
                         [options]="categActivos"
@@ -51,9 +51,8 @@
                     />
                     </div>
                    
-                <!-- }
-                @case ({ name: 'Pasivos' }) { -->
-                <!-- modificar el metodo de categoria pasivos -->
+                }
+                @case ({ name: 'Pasivos' }) {
                     <p-select 
                         [options]="categPasivos"
                         [(ngModel)]="selectCatActivos" 
@@ -63,11 +62,11 @@
                         [showClear]="true" 
                         placeholder="Seleccionar categoría" 
                         variant="filled"
-                        (ngModelChange)="setSelectCategActivos($event)" 
+                        (ngModelChange)="setSelectCategPasivos($event)" 
                     />
-                <!-- }
+                }
                 
-            } -->
+            }
             
             
             

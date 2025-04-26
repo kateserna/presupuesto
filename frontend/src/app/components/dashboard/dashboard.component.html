@@ -21,7 +21,7 @@
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Activos</h2>
-                <p-table [value]="allActivos()" [scrollable]="true" scrollHeight="200px">
+                <p-table [value]="allActivos()" [scrollable]="true" scrollHeight="180px">
                     <!-- <p-column field="fecha_transaccion" header="Fecha" [filter]="true" filterType="date"> -->
                         <ng-template #header>
                             <tr>
@@ -49,7 +49,7 @@
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Pasivos</h2>
-                <p-table [value]="allPasivos()" [scrollable]="true" scrollHeight="200px" panelSize="100%">
+                <p-table [value]="allPasivos()" [scrollable]="true" scrollHeight="180px" panelSize="100%">
                     <ng-template #header>
                         <tr>
                             <th>Fecha</th>
@@ -80,7 +80,7 @@
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Ingresos</h2>
-                <p-table [value]="allIngresos()" [scrollable]="true" scrollHeight="200px" panelSize="100%">
+                <p-table [value]="allIngresos()" [scrollable]="true" scrollHeight="180px" panelSize="100%">
                     <ng-template #header>
                         <tr>
                             <th>Fecha</th>
@@ -105,7 +105,7 @@
         <ng-template #panel>
             <div class="flex items-center justify-center h-full">
                 <h2>Egresos</h2>
-                <p-table [value]="allEgresos()" [scrollable]="true" scrollHeight="200px" panelSize="100%">
+                <p-table [value]="allEgresos()" [scrollable]="true" scrollHeight="180px" panelSize="100%">
                     <ng-template #header>
                         <tr>
                             <th>Fecha</th>
