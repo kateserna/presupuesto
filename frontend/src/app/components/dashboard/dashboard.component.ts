@@ -56,8 +56,8 @@ export class DashboardComponent implements OnInit{
     private egresosService: EgresosService
   ) {}
   
-  date = signal<Date | undefined>(undefined);
-
+  //monthDate: Date | undefined;
+  date = signal(new Date());
 
   email: string = ""
   listaActivos = signal<Transaccion[]>([]);
@@ -72,6 +72,7 @@ export class DashboardComponent implements OnInit{
   ngOnInit(): void {
 
     this.email = this.sharedService.getEmail() ?? "";
+    this.date.set(new Date());
 
     this.activosService.getAllActivos(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
@@ -98,22 +99,32 @@ export class DashboardComponent implements OnInit{
     })
   }
 
-  // Actualizacion de filtro fecha
-  updateDate(newDate: Date) {
-    const datePipe = new DatePipe('MM/yyyy');
-    this.date.set(newDate);
-    const dateMonth = datePipe.transform(this.date(), 'MM/yyyy')
+  filterMonth(dateMonth: Date){
+    this.date.set(dateMonth);
     console.log("Updated date 1:", this.date());
-    console.log("date transform:", dateMonth);
-
   }
+  // Actualizacion de filtro fecha
+  // setDateMes(monthDate: Date) {
+  //   this.monthDate = monthDate;
+  //   console.log("Updated date 1:", this.monthDate);
+  //   //const date = `${monthDate.getFullYear()}-${monthDate.getMonth() + 1}`;
+  //   console.log("solo fecha  :", `${this.date().getFullYear()}-${this.date().getMonth() + 1}`);
+  //   //console.log("This.lista:", this.listaActivos()[0].fecha_transaccion)
+  //   //console.log("fecha transaccion2:", this.listaActivos()[0].fecha_transaccion.toString().includes(date));
+  // }
 
   //devuelve las transacciones tipo activos de la tabla a traves del servicio
   allActivos = computed(() => {
     console.log("fecha transaccion:", this.listaActivos())
-    console.log("fecha filtro:", this.date()?.toDateString().split(" ")[1])
+    //const date =`${this.monthDate?.getFullYear() ?? 2025}-${this.monthDate?.getMonth() ?? 4}`;
+    //console.log("fecha transaccion3:", date);
     return this.listaActivos()
-      //.filter(activos => activos.fecha_transaccion.getMonth() == this.date()?.getMonth())
+      .filter(activo => {
+      const transactionDate = new Date(activo.fecha_transaccion);
+      return transactionDate.getFullYear() === this.date().getFullYear() &&
+           transactionDate.getMonth() === this.date().getMonth();
+      });
+
   })
 
   //devuelve los pasivos de la base de datos a traves del servicio
@@ -122,10 +133,12 @@ export class DashboardComponent implements OnInit{
       
   })
 
+  //devuelve los ingresos de la base de datos a traves del servicio
   allIngresos = computed( () => {
     return this.listaIngresos()
   })
 
+  //devuelve los egresos de la base de datos a traves del servicio
   allEgresos = computed( () => {
     return this.listaEgresos()
   })

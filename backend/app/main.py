@@ -33,7 +33,7 @@ class Transacciones(BaseModel):
     usuario: str
     correo_electronico: str
     valor: int
-    fecha_transaccion: datetime
+    fecha_transaccion: str
     descripcion: Optional[str] 
     nombre_categoria: str
     tipo: str
@@ -132,7 +132,8 @@ def abc(correo_electronico: str, tipo: str) -> resultado:
                 usuario = row[0],
                 correo_electronico = row[1],
                 valor = row[2],
-                fecha_transaccion = row[3],
+                # Convertir a formato 'YYYY-MM' con leading zeros
+                fecha_transaccion = row[3].strftime("%Y-%m-%d").replace('-0', '-'),
                 descripcion = row [4],
                 nombre_categoria = row[5],
                 tipo = row[6],
@@ -143,6 +144,14 @@ def abc(correo_electronico: str, tipo: str) -> resultado:
     print("total:", total)
     return resultado(f"Se encontraron {len(lista_transacciones)} {tipo}", lista_transacciones, 200, total)
 
+"""
+@app.get("/activos/{correo_electronico}/")
+async def get_activos(correo_electronico: str, fecha: Optional[str] = None):
+    print("correo_electronico: ", correo_electronico)
+    print("fecha: ", fecha)
+    filter_clause = f"AND fecha_transaccion = '{fecha}'" if fecha else ""
+    return abc(correo_electronico, f"activos {filter_clause}")
+"""
 
 @app.get("/activos/{correo_electronico}")
 async def get_activos(correo_electronico: str):

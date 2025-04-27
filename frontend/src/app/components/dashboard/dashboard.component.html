@@ -9,7 +9,7 @@
                 [readonlyInput]="true"
                 showIcon="true"
                 inputId="filtroMes"
-                (ngModelChange)="updateDate($event)"
+                (ngModelChange)="filterMonth($event)"
             />
             <label for="filtroMes">Filtrar mes</label>
         </p-floatlabel>
@@ -91,7 +91,7 @@
                     </ng-template>
                     <ng-template #body let-ingresos>
                         <tr>
-                            <td>{{ingresos.fecha_transaccion | date: 'dd/MM/yyyy' }}</td>
+                            <td>{{ingresos.fecha_transaccion | date: 'dd/MM/yyyy'}}</td>
                             <td>{{ingresos.nombre_categoria}}</td>
                             <td>{{ingresos.descripcion}}</td>
                             <td>{{ingresos.valor | number: '1.0-2'}}</td>
@@ -116,7 +116,7 @@
                     </ng-template>
                     <ng-template #body let-egresos>
                         <tr>
-                            <td>{{egresos.fecha_transaccion | date: 'dd/MM/yyyy' }}</td>
+                            <td>{{egresos.fecha_transaccion | date: 'dd/MM/yyyy'}}</td>
                             <td>{{egresos.nombre_categoria}}</td>
                             <td>{{egresos.descripcion}}</td>
                             <td>{{egresos.valor | number: '1.0-2'}}</td>
