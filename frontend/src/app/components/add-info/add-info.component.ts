@@ -199,25 +199,25 @@ export class AddInfoComponent implements OnInit {
 
   //metodo para crear registro:
   addTransaccion(){
-    // const temp = '';
-    // if(this.tipoSeccion === "Activos"){
-    //   temp = this.selectCatActivos?.name ?? ''
-    // }else if(this.tipoSeccion === "Pasivos"){
-    //   temp = this.selectCatPasivos?.name ?? ''
-    // }else if(this.tipoSeccion === "Ingresos"){
-    //   temo = this.selectCatIngresos?.name ?? ''
-    // }else if(this.tipoSeccion === "Egresos"){
-    //   temo = this.selectCatEgresos?.name ?? ''
-    // }else{
-    //   alert("Error: no se ha seleccionado una categoria");
-    //   return; 
-    // }
+    let categoria = '';
+    if(this.tipoSeccion?.name === "activos"){
+      categoria = this.selectCatActivos?.name ?? ''
+    }else if(this.tipoSeccion?.name === "pasivos"){
+      categoria = this.selectCatPasivos?.name ?? ''
+    }else if(this.tipoSeccion?.name === "ingresos"){
+      categoria = this.selectCatIngresos?.name ?? ''
+    }else if(this.tipoSeccion?.name === "egresos"){
+      categoria = this.selectCatEgresos?.name ?? ''
+    }else{
+      alert("Error: no se ha seleccionado una categoria");
+      return; 
+    }
     const newTransaccion: Transaccion ={
       usuario: this.usuario,
       correo_electronico: this.email,
       fecha_transaccion: this.dateTransaccion ?? new Date(),
       tipo: this.tipoSeccion?.name ?? '',
-      nombre_categoria: this.selectCatActivos?.name ?? '',
+      nombre_categoria: categoria,
       descripcion: this.descripcion, //opcional
       valor: this.valor ?? 0
 
