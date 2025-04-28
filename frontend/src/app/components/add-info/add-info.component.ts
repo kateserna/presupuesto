@@ -12,6 +12,7 @@ import { PasivosService } from '../../core/services/pasivos.service';
 import { IngresosService } from '../../core/services/ingresos.service';
 import { ActivosService } from '../../core/services/activos.service';
 import { EgresosService } from '../../core/services/egresos.service';
+import { CommonModule } from '@angular/common';
 
 interface Opciones {
   name: string;
@@ -37,7 +38,8 @@ interface Transaccion{
     InputNumber,
     InputTextModule,
     DatePickerModule,
-    ButtonModule
+    ButtonModule, 
+    CommonModule
   ],
   templateUrl: './add-info.component.html',
   styleUrl: './add-info.component.scss'
@@ -197,6 +199,19 @@ export class AddInfoComponent implements OnInit {
 
   //metodo para crear registro:
   addTransaccion(){
+    // const temp = '';
+    // if(this.tipoSeccion === "Activos"){
+    //   temp = this.selectCatActivos?.name ?? ''
+    // }else if(this.tipoSeccion === "Pasivos"){
+    //   temp = this.selectCatPasivos?.name ?? ''
+    // }else if(this.tipoSeccion === "Ingresos"){
+    //   temo = this.selectCatIngresos?.name ?? ''
+    // }else if(this.tipoSeccion === "Egresos"){
+    //   temo = this.selectCatEgresos?.name ?? ''
+    // }else{
+    //   alert("Error: no se ha seleccionado una categoria");
+    //   return; 
+    // }
     const newTransaccion: Transaccion ={
       usuario: this.usuario,
       correo_electronico: this.email,

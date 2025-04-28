@@ -32,13 +32,12 @@
                 variant="filled"
                 class="w-full md:w-256"
                 (ngModelChange)="setTipoSeccion($event)"
-            />
+            ></p-select>
             <br>
             <p>Categoría:</p>
-            @switch (tipoSeccion) {
-                @case ({ name:'activos' }) {
-                    <div>
-                        <p-select 
+            <ng-container [ngSwitch]="tipoSeccion?.name">
+                <div *ngSwitchCase="'activos'">
+                    <p-select 
                         [options]="categActivos"
                         [(ngModel)]="selectCatActivos" 
                         name="selectCatActivos"
@@ -49,9 +48,8 @@
                         variant="filled"
                         (ngModelChange)="setSelectCategActivos($event)" 
                     />
-                    </div>
-                }
-                @case ({ name: 'pasivos' }) {
+                </div>
+                <div *ngSwitchCase="'pasivos'">
                     <p-select 
                         [options]="categPasivos"
                         [(ngModel)]="selectCatPasivos" 
@@ -63,9 +61,8 @@
                         variant="filled"
                         (ngModelChange)="setSelectCategPasivos($event)" 
                     />
-                }
-
-                @case ({ name: 'ingresos' }) {
+                </div>
+                <div *ngSwitchCase="'ingresos'">
                     <p-select 
                         [options]="categIngresos"
                         [(ngModel)]="selectCatIngresos" 
@@ -77,9 +74,8 @@
                         variant="filled"
                         (ngModelChange)="setSelectCategIngresos($event)" 
                     />
-                }
-
-                @case ({ name: 'egresos' }) {
+                </div>
+                <div *ngSwitchCase="'egresos'">
                     <p-select 
                         [options]="categEgresos"
                         [(ngModel)]="selectCatEgresos" 
@@ -91,16 +87,10 @@
                         variant="filled"
                         (ngModelChange)="setSelectCategEgresos($event)" 
                     />
-                }
-                
-            }
-            
-            
-            
-
-
-            <!-- @case () {} usar case para colocar la lista desplegable de por opcion de seccion-->
+                </div>
+            </ng-container>
         </div>
+            
         <br>
         <div class="flex-auto">
             <p>Valor:</p>
