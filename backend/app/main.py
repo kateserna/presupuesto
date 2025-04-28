@@ -113,7 +113,7 @@ with engine.connect() as conn:
         raise HTTPException(status_code=404, detail="No users found")
 """
 
-def abc(correo_electronico: str, tipo: str) -> resultado:
+def get_transaccion(correo_electronico: str, tipo: str) -> resultado:
     with engine.connect() as conn:
         # TODO: corregir creacion del stmt para evitar concatenar
         result = conn.execute(create_stmt_select(f"WHERE tipo = '{tipo}' AND correo_electronico = '{correo_electronico}'")).fetchall()
@@ -150,24 +150,24 @@ async def get_activos(correo_electronico: str, fecha: Optional[str] = None):
     print("correo_electronico: ", correo_electronico)
     print("fecha: ", fecha)
     filter_clause = f"AND fecha_transaccion = '{fecha}'" if fecha else ""
-    return abc(correo_electronico, f"activos {filter_clause}")
+    return get_transaccion(correo_electronico, f"activos {filter_clause}")
 """
 
 @app.get("/activos/{correo_electronico}")
 async def get_activos(correo_electronico: str):
-    return abc(correo_electronico, "activos")
+    return get_transaccion(correo_electronico, "activos")
 
 @app.get("/pasivos/{correo_electronico}")
 async def get_pasivos(correo_electronico: str):
-    return abc(correo_electronico, "pasivos")
+    return get_transaccion(correo_electronico, "pasivos")
 
 @app.get("/ingresos/{correo_electronico}")
 async def get_ingresos(correo_electronico: str):
-    return abc(correo_electronico, "ingresos")
+    return get_transaccion(correo_electronico, "ingresos")
 
 @app.get("/egresos/{correo_electronico}")
 async def get_egresos(correo_electronico: str):
-    return abc(correo_electronico, "egresos")
+    return get_transaccion(correo_electronico, "egresos")
 
 @app.post("/transacciones/", status_code=200)
 async def add_transaccion(transaccion: Transacciones):
