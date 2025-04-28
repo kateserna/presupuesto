@@ -111,7 +111,6 @@ export class DashboardComponent implements OnInit{
   })
 
   totalIngresos = computed( () => {
-    //return this.listaIngresos().reduce((acc, curr) => acc + curr.valor, 0);
     return this.listaIngresos().reduce((total, ingreso) => {
       const transactionDate = new Date(ingreso.fecha_transaccion);
       
@@ -137,7 +136,6 @@ export class DashboardComponent implements OnInit{
   })
 
   totalEgresos = computed( () => {
-    //return this.listaIngresos().reduce((acc, curr) => acc + curr.valor, 0);
     return this.listaEgresos().reduce((total, egresos) => {
       const transactionDate = new Date(egresos.fecha_transaccion);
       

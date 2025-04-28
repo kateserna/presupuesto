@@ -56,6 +56,7 @@ export class AddInfoComponent implements OnInit {
   listaEgresos = signal<Transaccion[]>([]);
 
   dateTransaccion: Date | undefined;
+  maxDate: Date | undefined;
 
   //Seccion: Activos, Pasivos, Ingresos, Egresos
   seccion: Opciones[] | undefined;
@@ -82,6 +83,7 @@ export class AddInfoComponent implements OnInit {
 
     this.email = this.sharedService.getEmail() ?? "";
     this.usuario = this.sharedService.getUsuario() ?? "";
+    this.maxDate = new Date();
 
     //opciones de seccion:
     this.seccion = [

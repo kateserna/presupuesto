@@ -1,6 +1,23 @@
 <div class="flex items-center justify-center h-full">
-    <p-card [style]="{ overflow: 'hidden' }">
-        <h2>Egresos</h2>
+    <p-card>
+        <h2>Lista de Egresos</h2>
+        <div class="justify-right">
+            <p>Filtro mensual para Ingresos:</p>
+            <p-floatlabel variant="in">
+                <p-datepicker 
+                    [(ngModel)]="date"
+                    view="month"
+                    dateFormat="mm/yy"
+                    [maxDate]="maxDate"
+                    [readonlyInput]="true"
+                    showIcon="true"
+                    inputId="filtroMes"
+                    (ngModelChange)="filterMonth($event)"
+                />
+                <label for="filtroMes">Filtrar mes</label>
+            </p-floatlabel>
+        </div>
+        <br>
         <p-table [value]="allEgresos()" [scrollable]="true" scrollHeight="400px" panelSize="100%">
             <ng-template #header>
                 <tr>
