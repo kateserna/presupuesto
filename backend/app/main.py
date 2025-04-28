@@ -170,7 +170,7 @@ async def get_egresos(correo_electronico: str):
     return abc(correo_electronico, "egresos")
 
 @app.post("/transacciones/", status_code=200)
-async def add_activos(transaccion: Transacciones):
+async def add_transaccion(transaccion: Transacciones):
     print(transaccion)
     print(engine)
 

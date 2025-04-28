@@ -1,5 +1,5 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
-import { ActivosService } from '../../core/services/activos.service';
+import { TransaccionService } from '../../core/services/transaccion.service';
 import { SharedService } from '../../core/services/shared.service';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
@@ -30,7 +30,7 @@ interface Transaccion{
 export class ActivosComponent implements OnInit{
 
   constructor(
-    private activosService: ActivosService,
+    private transaccionService: TransaccionService,
     private sharedService: SharedService,
   ) {}
 
@@ -42,7 +42,7 @@ export class ActivosComponent implements OnInit{
 
     this.email = this.sharedService.getEmail() ?? "";
 
-    this.activosService.getAllActivos(this.email).subscribe((data:any) => {
+    this.transaccionService.getAllActivos(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
       this.totalActivos.set(data.total)
       console.log("activos: ",data)

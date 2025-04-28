@@ -1,5 +1,5 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
-import { EgresosService } from '../../core/services/egresos.service';
+import { TransaccionService } from '../../core/services/transaccion.service';
 import { SharedService } from '../../core/services/shared.service';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
@@ -29,7 +29,7 @@ interface Transaccion{
 export class EgresosComponent implements OnInit{
   
   constructor(
-    private egresosService: EgresosService,
+    private transaccionService: TransaccionService,
     private sharedService: SharedService,
   ) {}
 
@@ -40,7 +40,7 @@ export class EgresosComponent implements OnInit{
   ngOnInit(): void {
     this.email = this.sharedService.getEmail() ?? "";
     
-    this.egresosService.getAllEgresos(this.email).subscribe( ( data: any ) => {
+    this.transaccionService.getAllEgresos(this.email).subscribe( ( data: any ) => {
       this.listaEgresos.set(data.message);
       this.totalEgresos.set(data.total)
       console.log("egresos: ", data)

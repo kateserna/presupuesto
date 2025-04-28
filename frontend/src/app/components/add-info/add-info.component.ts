@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { SharedService } from '../../core/services/shared.service';
+import { TransaccionService } from '../../core/services/transaccion.service';
 import { FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { CardModule } from 'primeng/card';
@@ -8,10 +9,6 @@ import { InputNumber } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
-import { PasivosService } from '../../core/services/pasivos.service';
-import { IngresosService } from '../../core/services/ingresos.service';
-import { ActivosService } from '../../core/services/activos.service';
-import { EgresosService } from '../../core/services/egresos.service';
 import { CommonModule } from '@angular/common';
 
 interface Opciones {
@@ -48,10 +45,7 @@ interface Transaccion{
 export class AddInfoComponent implements OnInit {
   constructor(
       private sharedService: SharedService, 
-      private activosService: ActivosService,
-      private pasivosService: PasivosService,
-      private ingresosService: IngresosService,
-      private egresosService: EgresosService
+      private transaccionService: TransaccionService,
     ) {}
 
   email: string = ""
@@ -103,7 +97,7 @@ export class AddInfoComponent implements OnInit {
       { name: 'ahorro' },
       { name: 'negocio' },
       { name: 'inversión' },
-      { name: 'bienes raices' },
+      { name: 'bienes raíces' },
       { name: 'otro' },
     ];
 
@@ -224,7 +218,7 @@ export class AddInfoComponent implements OnInit {
     };
 
     //verificacion del resultado de la petición
-    const result = this.activosService.createTransaccion(newTransaccion).subscribe({
+    const result = this.transaccionService.createTransaccion(newTransaccion).subscribe({
       next: (data: any) => {
         this.listaActivos.update((historial:Transaccion[]) => {
           console.log("Nuevo registro activos:", newTransaccion)

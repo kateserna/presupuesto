@@ -1,5 +1,5 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
-import { IngresosService } from '../../core/services/ingresos.service';
+import { TransaccionService } from '../../core/services/transaccion.service';
 import { SharedService } from '../../core/services/shared.service';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
@@ -29,8 +29,8 @@ interface Transaccion{
 export class IngresosComponent implements OnInit{
 
   constructor(
-    private ingresosService: IngresosService,
-      private sharedService: SharedService,
+    private transaccionService: TransaccionService,
+    private sharedService: SharedService,
     ) {}
 
     email: string = ""
@@ -40,7 +40,7 @@ export class IngresosComponent implements OnInit{
     ngOnInit(): void {
       this.email = this.sharedService.getEmail() ?? "";
 
-      this.ingresosService.getAllIngresos(this.email).subscribe( (data:any) => {
+      this.transaccionService.getAllIngresos(this.email).subscribe( (data:any) => {
         this.listaIngresos.set(data.menssage);
         this.totalIngresos.set(data.total)
         console.log("ingresos: ", data)

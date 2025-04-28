@@ -2,11 +2,8 @@ import { Component, computed, OnInit, signal } from '@angular/core';
 import { SplitterModule } from 'primeng/splitter';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { ActivosService } from '../../core/services/activos.service';
+import { TransaccionService } from '../../core/services/transaccion.service';
 import { SharedService } from '../../core/services/shared.service';
-import { PasivosService } from '../../core/services/pasivos.service';
-import { IngresosService } from '../../core/services/ingresos.service';
-import { EgresosService } from '../../core/services/egresos.service';
 import { FormsModule } from '@angular/forms';
 import { DatePicker } from 'primeng/datepicker';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -42,10 +39,7 @@ export class DashboardComponent implements OnInit{
 
   constructor(
     private sharedService: SharedService, 
-    private activosService: ActivosService,
-    private pasivosService: PasivosService,
-    private ingresosService: IngresosService,
-    private egresosService: EgresosService
+    private transaccionService: TransaccionService,
   ) {}
   
   date = signal(new Date());
@@ -65,24 +59,24 @@ export class DashboardComponent implements OnInit{
     this.date.set(new Date());
     this.maxDate = new Date();
 
-    this.activosService.getAllActivos(this.email).subscribe((data:any) => {
+    this.transaccionService.getAllActivos(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
       this.totalActivos.set(data.total)
       console.log("activos: ",data)
     })
 
-    this.pasivosService.getAllPasivos(this.email).subscribe( (data: any) => {
+    this.transaccionService.getAllPasivos(this.email).subscribe( (data: any) => {
       this.listaPasivos.set(data.message);
       this.totalPasivos.set(data.total)
       console.log("pasivos: ", data)
     })
 
-    this.ingresosService.getAllIngresos(this.email).subscribe( (data:any) => {
+    this.transaccionService.getAllIngresos(this.email).subscribe( (data:any) => {
       this.listaIngresos.set(data.message);
       console.log("ingresos: ", data)
     })
 
-    this.egresosService.getAllEgresos(this.email).subscribe( ( data: any ) => {
+    this.transaccionService.getAllEgresos(this.email).subscribe( ( data: any ) => {
       this.listaEgresos.set(data.message);
       console.log("egresos: ", data)
     })
