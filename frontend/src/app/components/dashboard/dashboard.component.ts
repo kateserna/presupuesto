@@ -125,20 +125,34 @@ export class DashboardComponent implements OnInit{
   //devuelve los pasivos de la base de datos a traves del servicio
   allPasivos = computed( () => {
     return this.listaPasivos()
-      
   })
 
   //devuelve los ingresos de la base de datos a traves del servicio
   allIngresos = computed( () => {
+    console.log("fecha transaccion:", this.listaIngresos())
     return this.listaIngresos()
+    //verificar total correcto por mes
+      .filter(ingreso => {
+        const transactionDate = new Date(ingreso.fecha_transaccion);
+        return transactionDate.getFullYear() === this.date().getFullYear() &&
+            transactionDate.getMonth() === this.date().getMonth();
+        });
   })
 
   //devuelve los egresos de la base de datos a traves del servicio
   allEgresos = computed( () => {
+    console.log("fecha transaccion:", this.listaEgresos())
     return this.listaEgresos()
+    //verificar total correcto por mes
+      .filter(egresos => {
+        const transactionDate = new Date(egresos.fecha_transaccion);
+        return transactionDate.getFullYear() === this.date().getFullYear() &&
+            transactionDate.getMonth() === this.date().getMonth();
+        });
   })
   
   patrimonio = computed( () => this.totalActivos() - this.totalPasivos())
+  //verificar que se de el valor correcto por mes
   flujoDeCaja = computed( () => this.totalIngresos() - this.totalEgresos())
 }
 
