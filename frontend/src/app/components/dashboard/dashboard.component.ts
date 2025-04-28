@@ -22,13 +22,7 @@ interface Transaccion{
   valor: number;
 }
 
-interface Activos {
-  id: number
-  categoria: string
-  valor: number
-  desripcion: string
-  fecha_transaccion: Date
-}
+
 
 @Component({
   selector: 'app-dashboard',
@@ -88,7 +82,7 @@ export class DashboardComponent implements OnInit{
     })
 
     this.ingresosService.getAllIngresos(this.email).subscribe( (data:any) => {
-      this.listaIngresos.set(data.menssage);
+      this.listaIngresos.set(data.message);
       this.totalIngresos.set(data.total)
       console.log("ingresos: ", data)
     })
