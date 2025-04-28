@@ -15,7 +15,7 @@ export class ActivosService {
     return this.http.get(`${this.URLBase}/activos/${email}`)
   }
 
-  createActivos(activo: any){
-    return this.http.post(`${this.URLBase}/transacciones`,activo)
+    createTransaccion(transaccion: any){
+    return this.http.post(`${this.URLBase}/transacciones`, transaccion);
   }
 }

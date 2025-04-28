@@ -132,7 +132,7 @@ def abc(correo_electronico: str, tipo: str) -> resultado:
                 usuario = row[0],
                 correo_electronico = row[1],
                 valor = row[2],
-                # Convertir a formato 'YYYY-MM' con leading zeros
+                # Convertir a formato 'YYYY-MM' sin leading zeros
                 fecha_transaccion = row[3].strftime("%Y-%m-%d").replace('-0', '-'),
                 descripcion = row [4],
                 nombre_categoria = row[5],

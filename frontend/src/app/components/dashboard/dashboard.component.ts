@@ -56,8 +56,8 @@ export class DashboardComponent implements OnInit{
     private egresosService: EgresosService
   ) {}
   
-  //monthDate: Date | undefined;
   date = signal(new Date());
+  maxDate: Date | undefined;
 
   email: string = ""
   listaActivos = signal<Transaccion[]>([]);
@@ -73,6 +73,7 @@ export class DashboardComponent implements OnInit{
 
     this.email = this.sharedService.getEmail() ?? "";
     this.date.set(new Date());
+    this.maxDate = new Date();
 
     this.activosService.getAllActivos(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
@@ -103,28 +104,28 @@ export class DashboardComponent implements OnInit{
     this.date.set(dateMonth);
     console.log("Updated date 1:", this.date());
   }
-  // Actualizacion de filtro fecha
-  // setDateMes(monthDate: Date) {
-  //   this.monthDate = monthDate;
-  //   console.log("Updated date 1:", this.monthDate);
-  //   //const date = `${monthDate.getFullYear()}-${monthDate.getMonth() + 1}`;
-  //   console.log("solo fecha  :", `${this.date().getFullYear()}-${this.date().getMonth() + 1}`);
-  //   //console.log("This.lista:", this.listaActivos()[0].fecha_transaccion)
-  //   //console.log("fecha transaccion2:", this.listaActivos()[0].fecha_transaccion.toString().includes(date));
-  // }
 
   //devuelve las transacciones tipo activos de la tabla a traves del servicio
   allActivos = computed(() => {
     console.log("fecha transaccion:", this.listaActivos())
-    //const date =`${this.monthDate?.getFullYear() ?? 2025}-${this.monthDate?.getMonth() ?? 4}`;
-    //console.log("fecha transaccion3:", date);
     return this.listaActivos()
       .filter(activo => {
       const transactionDate = new Date(activo.fecha_transaccion);
       return transactionDate.getFullYear() === this.date().getFullYear() &&
            transactionDate.getMonth() === this.date().getMonth();
       });
+  })
 
+  totalActivos2 = computed( () => {
+    return this.listaActivos().reduce((acc, curr) => acc + curr.valor, 0);
+    // return this.listaActivos().reduce((total, activo) => {
+    //   const transactionDate = new Date(activo.fecha_transaccion);
+    //   if (transactionDate.getFullYear() === this.date().getFullYear() &&
+    //       transactionDate.getMonth() === this.date().getMonth()) {
+    //     return total + activo.valor;
+    //   }
+    //   return total;
+    // }, 0);
   })
 
   //devuelve los pasivos de la base de datos a traves del servicio
