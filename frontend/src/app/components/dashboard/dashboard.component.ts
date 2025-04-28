@@ -22,8 +22,6 @@ interface Transaccion{
   valor: number;
 }
 
-
-
 @Component({
   selector: 'app-dashboard',
   imports: [
@@ -60,8 +58,6 @@ export class DashboardComponent implements OnInit{
   listaEgresos = signal<Transaccion[]>([]);
   totalActivos = signal(0);
   totalPasivos = signal(0);
-  totalIngresos = signal(0);
-  totalEgresos = signal(0);
 
   ngOnInit(): void {
 
@@ -83,13 +79,11 @@ export class DashboardComponent implements OnInit{
 
     this.ingresosService.getAllIngresos(this.email).subscribe( (data:any) => {
       this.listaIngresos.set(data.message);
-      this.totalIngresos.set(data.total)
       console.log("ingresos: ", data)
     })
 
     this.egresosService.getAllEgresos(this.email).subscribe( ( data: any ) => {
       this.listaEgresos.set(data.message);
-      this.totalEgresos.set(data.total)
       console.log("egresos: ", data)
     })
   }
@@ -103,23 +97,6 @@ export class DashboardComponent implements OnInit{
   allActivos = computed(() => {
     console.log("fecha transaccion:", this.listaActivos())
     return this.listaActivos()
-      .filter(activo => {
-      const transactionDate = new Date(activo.fecha_transaccion);
-      return transactionDate.getFullYear() === this.date().getFullYear() &&
-           transactionDate.getMonth() === this.date().getMonth();
-      });
-  })
-
-  totalActivos2 = computed( () => {
-    return this.listaActivos().reduce((acc, curr) => acc + curr.valor, 0);
-    // return this.listaActivos().reduce((total, activo) => {
-    //   const transactionDate = new Date(activo.fecha_transaccion);
-    //   if (transactionDate.getFullYear() === this.date().getFullYear() &&
-    //       transactionDate.getMonth() === this.date().getMonth()) {
-    //     return total + activo.valor;
-    //   }
-    //   return total;
-    // }, 0);
   })
 
   //devuelve los pasivos de la base de datos a traves del servicio
@@ -139,6 +116,20 @@ export class DashboardComponent implements OnInit{
         });
   })
 
+  totalIngresos = computed( () => {
+    //return this.listaIngresos().reduce((acc, curr) => acc + curr.valor, 0);
+    return this.listaIngresos().reduce((total, ingreso) => {
+      const transactionDate = new Date(ingreso.fecha_transaccion);
+      
+      if (transactionDate.getFullYear() === this.date().getFullYear() &&
+          transactionDate.getMonth() === this.date().getMonth()) {
+            
+        return total + ingreso.valor;
+      }
+      return total;
+    }, 0);
+  })
+
   //devuelve los egresos de la base de datos a traves del servicio
   allEgresos = computed( () => {
     console.log("fecha transaccion:", this.listaEgresos())
@@ -150,9 +141,23 @@ export class DashboardComponent implements OnInit{
             transactionDate.getMonth() === this.date().getMonth();
         });
   })
+
+  totalEgresos = computed( () => {
+    //return this.listaIngresos().reduce((acc, curr) => acc + curr.valor, 0);
+    return this.listaEgresos().reduce((total, egresos) => {
+      const transactionDate = new Date(egresos.fecha_transaccion);
+      
+      if (transactionDate.getFullYear() === this.date().getFullYear() &&
+          transactionDate.getMonth() === this.date().getMonth()) {
+            
+        return total + egresos.valor;
+      }
+      return total;
+    }, 0);
+  })
   
-  patrimonio = computed( () => this.totalActivos() - this.totalPasivos())
   //verificar que se de el valor correcto por mes
   flujoDeCaja = computed( () => this.totalIngresos() - this.totalEgresos())
+  patrimonio = computed( () => this.totalActivos() - this.totalPasivos())
 }
 
