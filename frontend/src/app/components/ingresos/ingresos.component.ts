@@ -41,7 +41,7 @@ export class IngresosComponent implements OnInit{
       this.email = this.sharedService.getEmail() ?? "";
 
       this.transaccionService.getAllIngresos(this.email).subscribe( (data:any) => {
-        this.listaIngresos.set(data.menssage);
+        this.listaIngresos.set(data.message);
         this.totalIngresos.set(data.total)
         console.log("ingresos: ", data)
       })
