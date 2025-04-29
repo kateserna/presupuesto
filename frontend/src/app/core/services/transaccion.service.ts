@@ -34,4 +34,7 @@ export class TransaccionService {
     return this.http.post(`${this.URLBase}/transacciones`, transaccion);
   }
 
+  deleteTransaccion(id: number){
+    return this.http.delete(`${this.URLBase}/transacciones/${id}`);
+  }
 }

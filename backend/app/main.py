@@ -196,6 +196,7 @@ async def add_transaccion(transaccion: Transacciones):
 
 @app.delete("/transacciones/{id_transaccion}", status_code=200)
 async def delete_transaccion(id_transaccion: int):
+    print("id_transaccion:", id_transaccion)
     with engine.connect() as conn:
         # TODO: corregir creacion del stmt para evitar concatenar
         sql = create_stmt_delete(id_transaccion)

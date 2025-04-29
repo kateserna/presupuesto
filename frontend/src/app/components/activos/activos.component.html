@@ -2,14 +2,15 @@
 <div class="flex items-center justify-center h-full">
     <p-card [style]="{ overflow: 'hidden' }">
         <h2>Lista de Activos</h2>
-        <p-table [value]="allActivos()" [scrollable]="true" scrollHeight="400px">
-            <!-- <p-column field="fecha_transaccion" header="Fecha" [filter]="true" filterType="date"> -->
+        <div clss ="card">
+            <p-table [value]="allActivos()" scrollable="true" scrollHeight="400px">
                 <ng-template #header>
                     <tr>
                         <th>Fecha</th>
                         <th>Categoría</th>
                         <th>Descripción</th>
                         <th>Valor</th>
+                        <th> </th>
                     </tr>
                 </ng-template>
                 <ng-template #body let-activos>
@@ -18,12 +19,27 @@
                         <td>{{activos.nombre_categoria}}</td>
                         <td>{{activos.descripcion}}</td>
                         <td>{{activos.valor | number: '1.0-2'}}</td>
+                        <td>
+                            <p-button
+                                label="Eliminar"
+                                severity="danger"
+                                class="w-full"
+                                [raised]="true"
+                                [outlined]="true"
+                                styleClass="w-full"
+                                (click)="deleteActivos(activos.id)"
+                            /> 
+                        </td>
+                        
                     </tr>
 
                 </ng-template>
         
-        </p-table>
+            </p-table>
+        </div>
+        
         <h3>Total Activos: {{ totalActivos() | number: '1.0-2' }}</h3>
+        
     </p-card>
     
 </div>

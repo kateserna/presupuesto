@@ -4,6 +4,7 @@ import { SharedService } from '../../core/services/shared.service';
 import { TableModule } from 'primeng/table';
 import { CardModule } from 'primeng/card';
 import { DecimalPipe, DatePipe } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
 
 interface Transaccion{
   id: number;
@@ -22,7 +23,8 @@ interface Transaccion{
     TableModule,
     CardModule,
     DecimalPipe, 
-    DatePipe 
+    DatePipe,
+    ButtonModule
   ],
   templateUrl: './activos.component.html',
   styleUrl: './activos.component.scss'
@@ -38,6 +40,7 @@ export class ActivosComponent implements OnInit{
   email: string = ""
   listaActivos = signal<Transaccion[]>([]);
   totalActivos = signal(0);
+  id: number = 0;
 
   ngOnInit(): void {
 
@@ -59,4 +62,19 @@ export class ActivosComponent implements OnInit{
       //.filter(activos => activos.fecha_transaccion.getMonth() == this.date()?.getMonth())
   })
 
+  deleteActivos(id: number){
+    //const index = this.listaActivos().findIndex((activos) => activos.id === id);
+    const result = this.transaccionService.deleteTransaccion(id).subscribe({
+      next: (data: any) => {
+        console.log("id: ", id)
+        console.log("eliminado: ",data)
+        this.listaActivos.set(this.listaActivos().filter((activos) => activos.id !== id));
+        alert("Transacción eliminada correctamente");
+      },
+      error: (err) => {
+        console.error("Error al eliminar la transacción: ", err);
+        alert("Error al eliminar la transacción: " + err.error.message);
+      }
+    });
+  }
 }
