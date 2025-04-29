@@ -10,6 +10,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { DecimalPipe, DatePipe } from '@angular/common';
 
 interface Transaccion{
+  id: number;
   usuario: string;
   fecha_creacion: Date;
   fecha_transaccion: Date;

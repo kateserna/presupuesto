@@ -30,6 +30,7 @@ app.add_middleware(
 )
 
 class Transacciones(BaseModel):
+    id: int
     usuario: str
     correo_electronico: str
     valor: int
@@ -52,7 +53,7 @@ engine = create_engine(DATABASE_URL)
 
 def create_stmt_select(filter = ""):
     basic_stmt = """
-                SELECT usuario, correo_electronico, valor, fecha_transaccion, descripcion, nombre_categoria, tipo 
+                SELECT transacciones.id, usuario, correo_electronico, valor, fecha_transaccion, descripcion, nombre_categoria, tipo 
                 FROM transacciones
                 INNER JOIN categoria ON categoria_id = categoria.id
                 INNER JOIN usuario ON usuario_id = usuario.id 
@@ -81,6 +82,12 @@ def create_stmt_insert(correo_electronico:str, nombre_categoria:str, tipo:str, v
                 """
     return sql.text(basic_stmt)
 
+def create_stmt_delete(id_transaccion:int):
+    basic_stmt = f"""
+                DELETE FROM transacciones
+                WHERE id = {id_transaccion};
+                """
+    return sql.text(basic_stmt)
 
 """
 # Create the statement for the login query
@@ -129,17 +136,19 @@ def get_transaccion(correo_electronico: str, tipo: str) -> resultado:
     for row in result:
         lista_transacciones.append(
             Transacciones(
-                usuario = row[0],
-                correo_electronico = row[1],
-                valor = row[2],
+                id=row[0],
+                usuario = row[1],
+                correo_electronico = row[2],
+                valor = row[3],
                 # Convertir a formato 'YYYY-MM' sin leading zeros
-                fecha_transaccion = row[3].strftime("%Y-%m-%d").replace('-0', '-'),
-                descripcion = row [4],
-                nombre_categoria = row[5],
-                tipo = row[6],
+                #strftime("%Y/%-m/%-d")
+                fecha_transaccion = row[4].strftime("%Y-%m-%d").replace('-0', '-'),
+                descripcion = row [5],
+                nombre_categoria = row[6],
+                tipo = row[7],
             )
         )
-        total += row[2]
+        total += row[3]
         
     print("total:", total)
     return resultado(f"Se encontraron {len(lista_transacciones)} {tipo}", lista_transacciones, 200, total)
@@ -184,6 +193,17 @@ async def add_transaccion(transaccion: Transacciones):
     # Agregar conexión y sql aquí
 
     return {"mensaje":"Nuevo  activo"}
+
+@app.delete("/transacciones/{id_transaccion}", status_code=200)
+async def delete_transaccion(id_transaccion: int):
+    with engine.connect() as conn:
+        # TODO: corregir creacion del stmt para evitar concatenar
+        sql = create_stmt_delete(id_transaccion)
+        result = conn.execute(sql)
+        conn.commit()
+    print("Este es el resultado:",result)
+    return {"mensaje":"Transacción eliminada"}
+
 
 # Ejecutar la aplicación FastAPI
 if __name__ == "__main__":

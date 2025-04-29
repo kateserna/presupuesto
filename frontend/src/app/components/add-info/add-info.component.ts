@@ -16,6 +16,7 @@ interface Opciones {
 }
 
 interface Transaccion{
+  id: number;
   usuario: string
   correo_electronico: string;
   fecha_transaccion: Date;
@@ -209,6 +210,7 @@ export class AddInfoComponent implements OnInit {
       return; 
     }
     const newTransaccion: Transaccion ={
+      id: 0,
       usuario: this.usuario,
       correo_electronico: this.email,
       fecha_transaccion: this.dateTransaccion ?? new Date(),
