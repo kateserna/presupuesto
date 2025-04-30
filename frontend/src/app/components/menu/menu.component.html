@@ -8,12 +8,13 @@
                             <p-avatar image="{{idTokenClaims.picture}}" shape="circle" />
                         </p-button>
                         <p-popover #op>
-                            <div class="flex flex-col gap-4" justify-content="center" style="width: 200px">
+                            <div class="login" justify-content="center" style="width: 200px">
                                 <div>
-                                    <span class="font-medium block mb-2">{{idTokenClaims.name}}</span>
+                                    <span class="font-bold"><b>Usuario: </b>{{idTokenClaims.name}}</span>
                                 <br>
-                                    <span class="font-bold">{{idTokenClaims.email}}</span>
+                                    <span class="font-bold"><b>Email: </b>{{idTokenClaims.email}}</span>
                                 </div>
+                                <br>
                                 <p-button 
                                     label="Logout" 
                                     icon="pi pi-sign-out"

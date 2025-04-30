@@ -206,7 +206,7 @@ export class AddInfoComponent implements OnInit {
     }else if(this.tipoSeccion?.name === "egresos"){
       categoria = this.selectCatEgresos?.name ?? ''
     }else{
-      alert("Error: no se ha seleccionado una categoria");
+      alert("Error: no se ha seleccionado una sección");
       return; 
     }
     const newTransaccion: Transaccion ={
@@ -225,11 +225,11 @@ export class AddInfoComponent implements OnInit {
     const result = this.transaccionService.createTransaccion(newTransaccion).subscribe({
       next: (data: any) => {
         this.listaActivos.update((historial:Transaccion[]) => {
-          console.log("Nuevo registro activos:", newTransaccion)
+          console.log("Nuevo registro:", newTransaccion)
           return [...historial, newTransaccion];
         }
       );
-      alert("Producto creado correctamente");
+      alert("Registro creado correctamente");
       this.clearForm();
       },
       error: (err: any) => {
