@@ -34,6 +34,8 @@ export class ResumenComponent implements OnInit {
     listaActivos = signal<Transaccion[]>([]);
     basicData: any;
     basicOptions: any;
+    dataPie: any;
+    optionsPie: any;
     
 
     //platformId = inject(PLATFORM_ID);
@@ -57,7 +59,8 @@ export class ResumenComponent implements OnInit {
             console.log("Datos recibidos del servicio: ", data);
             this.listaActivos.set(data.message); // Asegúrate de que `data.message` contenga un array válido
             console.log("listaActivos después de set: ", this.listaActivos());
-            this.initChart(); // Llama a initChart después de cargar los datos
+            this.initChartActivosBarras(); // Llama a initChart después de cargar los datos
+            this.initChartActivosPie();
         });        
     }
 
@@ -78,7 +81,7 @@ export class ResumenComponent implements OnInit {
     })
 
     
-    initChart() {
+    initChartActivosBarras() {
         //if (isPlatformBrowser(this.platformId)) {
             const documentStyle = getComputedStyle(document.documentElement);
             const textColor = documentStyle.getPropertyValue('--p-text-color');
@@ -156,6 +159,67 @@ export class ResumenComponent implements OnInit {
             };
             this.cd.markForCheck()
        // }
+    }
+
+    initChartActivosPie() {
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--text-color');
+
+        const categoryTotals = this.activos();
+        const labels = Object.keys(categoryTotals);
+        const data = Object.values(categoryTotals);
+        console.log("categoryTotals2: ", categoryTotals)
+        console.log("labels2: ", labels)
+        console.log("data2: ", data)
+
+        this.dataPie = {
+            labels: labels,
+            datasets: [
+                {
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1,
+                    hoverBackgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(255, 205, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(201, 203, 207, 0.5)'
+                        ]
+                }
+            ]
+        };
+
+        this.optionsPie = {
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        color: textColor
+                    }
+                }
+            }
+        };
+        this.cd.markForCheck()
+
     }
 
 }

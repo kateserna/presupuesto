@@ -1,6 +1,6 @@
-<h1>Graficos Resumen</h1>
+<h1>Gráficos Resumen</h1>
 
-<p>Puedes elegir visualizar las graficas de acuerdo a la sección:</p>
+<p>Elige una sección para visualizar las gráficas:</p>
 <ul>
     <li>Activos</li>
     <li>Pasivos</li>
@@ -8,6 +8,11 @@
     <li>Egresos</li>
 
 </ul>
-<div class="card" style="width: 50%">
+<!-- graficos de activos -->
+<div class="card" style="width: 50%" justify="space-between">
     <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
+</div>
+<br>
+<div class="card" style="width: 50%; height: 30%;" justify="space-between">
+    <p-chart type="pie" [data]="dataPie" [options]="optionsPie" class="w-full md:w-[30rem]"></p-chart>
 </div>
