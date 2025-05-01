@@ -57,13 +57,10 @@ export class ActivosComponent implements OnInit{
   //devuelve las transacciones tipo activos de la tabla a traves del servicio
   allActivos = computed(() => {
     console.log("fecha transaccion:", this.listaActivos())
-    //console.log("fecha filtro:", this.date()?.toDateString().split(" ")[1])
     return this.listaActivos()
-      //.filter(activos => activos.fecha_transaccion.getMonth() == this.date()?.getMonth())
   })
 
   deleteActivos(id: number){
-    //const index = this.listaActivos().findIndex((activos) => activos.id === id);
     const result = this.transaccionService.deleteTransaccion(id).subscribe({
       next: (data: any) => {
         console.log("id: ", id)

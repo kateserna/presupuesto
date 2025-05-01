@@ -1,8 +1,21 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, effect, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 //import { AppConfigService } from '@/service/appconfigservice';
 import { ChartModule } from 'primeng/chart';
+import { TransaccionService } from '../../core/services/transaccion.service';
+import { SharedService } from '../../core/services/shared.service';
 
+interface Transaccion{
+    id: number;
+    usuario: string;
+    fecha_creacion: Date;
+    fecha_transaccion: Date;
+    tipo: string;
+    nombre_categoria: string;
+    descripcion?: string; //opcional
+    valor: number;
+  }
+  
 @Component({
   selector: 'app-resumen',
   imports: [ChartModule],
@@ -11,15 +24,23 @@ import { ChartModule } from 'primeng/chart';
 })
 export class ResumenComponent implements OnInit {
 
-    basicData: any;
+    constructor(
+        private cd: ChangeDetectorRef,
+        private sharedService: SharedService,
+        private transaccionService: TransaccionService
+    ) {}
 
+    email: string = ""
+    listaActivos = signal<Transaccion[]>([]);
+    basicData: any;
     basicOptions: any;
+    
 
     //platformId = inject(PLATFORM_ID);
 
     //configService = inject(AppConfigService);
 
-    constructor(private cd: ChangeDetectorRef) {}
+    
 
     // themeEffect = effect(() => {
     //     if (this.configService.transitionComplete()) {
@@ -30,9 +51,33 @@ export class ResumenComponent implements OnInit {
     // });
 
     ngOnInit() {
-        this.initChart();
+        this.email = this.sharedService.getEmail() ?? "";
+
+        this.transaccionService.getAllActivos(this.email).subscribe((data:any) => {
+            console.log("Datos recibidos del servicio: ", data);
+            this.listaActivos.set(data.message); // Asegúrate de que `data.message` contenga un array válido
+            console.log("listaActivos después de set: ", this.listaActivos());
+            this.initChart(); // Llama a initChart después de cargar los datos
+        });        
     }
 
+    activos = computed(() => {
+        const categoryTotals: { [key: string]: number } = {};
+        this.listaActivos().forEach((transaccion) => {
+            categoryTotals[transaccion.nombre_categoria] = 
+            (categoryTotals[transaccion.nombre_categoria] || 0) + transaccion.valor;
+            
+        });
+        console.log("categoryTotals: ", categoryTotals)
+        const labels = Object.keys(categoryTotals);
+        const data = Object.values(categoryTotals);
+        console.log("labels: ", labels)
+        console.log("data: ", data)
+        return categoryTotals;
+
+    })
+
+    
     initChart() {
         //if (isPlatformBrowser(this.platformId)) {
             const documentStyle = getComputedStyle(document.documentElement);
@@ -40,12 +85,24 @@ export class ResumenComponent implements OnInit {
             const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
             const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
 
+            const categoryTotals = this.activos();
+            const labels = Object.keys(categoryTotals);
+            const data = Object.values(categoryTotals);
+            console.log("categoryTotals2: ", categoryTotals)
+            console.log("labels2: ", labels)
+            console.log("data2: ", data)
+
+            if (labels.length === 0 || data.length === 0) {
+                console.error("No hay datos para mostrar en el gráfico.");
+                return;
+            }
+
             this.basicData = {
-                labels: ['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7'],
+                labels: labels,
                 datasets: [
                     {
-                        label: 'Sales',
-                        data: [540, 325, 702, 620, 740, 500, 600],
+                        label: 'Activos',
+                        data: data,
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(255, 159, 64, 0.2)',
@@ -73,26 +130,26 @@ export class ResumenComponent implements OnInit {
                 plugins: {
                     legend: {
                         labels: {
-                            color: textColor,
+                            color: textColor,// Color del texto de la leyenda
                         },
                     },
                 },
                 scales: {
                     x: {
                         ticks: {
-                            color: textColorSecondary,
+                            color: textColorSecondary,// Color de las etiquetas del eje X
                         },
                         grid: {
-                            color: surfaceBorder,
+                            color: surfaceBorder, // Color de las líneas de la cuadrícula
                         },
                     },
                     y: {
-                        beginAtZero: true,
+                        beginAtZero: true, // Comienza desde 0
                         ticks: {
-                            color: textColorSecondary,
+                            color: textColorSecondary, // Color de las etiquetas del eje Y
                         },
                         grid: {
-                            color: surfaceBorder,
+                            color: surfaceBorder, // Color de las líneas de la cuadrícula
                         },
                     },
                 },
