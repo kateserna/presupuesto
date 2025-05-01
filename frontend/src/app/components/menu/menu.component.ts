@@ -77,7 +77,8 @@ export class MenuComponent implements OnInit{
       },
       {
           label: 'Resumen',
-          icon: 'pi pi-wave-pulse'
+          icon: 'pi pi-wave-pulse',
+          routerLink: 'resumen'
       }
     ]
   }
