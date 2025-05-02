@@ -63,34 +63,28 @@ export class DashboardComponent implements OnInit{
     this.transaccionService.getAllActivos(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
       this.totalActivos.set(data.total)
-      console.log("activos: ",data)
     })
 
     this.transaccionService.getAllPasivos(this.email).subscribe( (data: any) => {
       this.listaPasivos.set(data.message);
       this.totalPasivos.set(data.total)
-      console.log("pasivos: ", data)
     })
 
     this.transaccionService.getAllIngresos(this.email).subscribe( (data:any) => {
       this.listaIngresos.set(data.message);
-      console.log("ingresos: ", data)
     })
 
     this.transaccionService.getAllEgresos(this.email).subscribe( ( data: any ) => {
       this.listaEgresos.set(data.message);
-      console.log("egresos: ", data)
     })
   }
 
   filterMonth(dateMonth: Date){
     this.date.set(dateMonth);
-    console.log("Updated date 1:", this.date());
   }
 
   //devuelve las transacciones tipo activos de la tabla a traves del servicio
   allActivos = computed(() => {
-    console.log("fecha transaccion:", this.listaActivos())
     return this.listaActivos()
   })
 
@@ -101,7 +95,6 @@ export class DashboardComponent implements OnInit{
 
   //devuelve los ingresos de la base de datos a traves del servicio
   allIngresos = computed( () => {
-    console.log("fecha transaccion:", this.listaIngresos())
     return this.listaIngresos()
     //verificar total correcto por mes
       .filter(ingreso => {
@@ -126,7 +119,6 @@ export class DashboardComponent implements OnInit{
 
   //devuelve los egresos de la base de datos a traves del servicio
   allEgresos = computed( () => {
-    console.log("fecha transaccion:", this.listaEgresos())
     return this.listaEgresos()
     //verificar total correcto por mes
       .filter(egresos => {

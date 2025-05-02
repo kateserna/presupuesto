@@ -25,18 +25,18 @@ export class MenuComponent implements OnInit{
   constructor(private sharedService: SharedService) {}
 
   ngOnInit(): void {
-    console.log(this.authService); // vemos todo lo que trae el servicio
+    // console.log(this.authService); // vemos todo lo que trae el servicio
     this.authService.idTokenClaims$.subscribe(claims => {
       if (claims) {
-        console.log('Token Claims:', claims); // vemos los claims del token
+        //console.log('Token Claims:', claims); // vemos los claims del token
         this.sharedService.setEmail(claims.email ?? "");
         this.sharedService.setUsuario(claims.name ?? "");
       }
     });
 
-    this.authService.user$.subscribe(user => {
-      console.log(user); // vemos los datos del usuario
-    });
+    //this.authService.user$.subscribe(user => {
+    //  console.log(user); // vemos los datos del usuario
+    //});
 
     this.items = [
       {
