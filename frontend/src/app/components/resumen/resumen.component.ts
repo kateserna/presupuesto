@@ -1,10 +1,11 @@
-import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, computed, effect, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, OnInit, signal } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { TransaccionService } from '../../core/services/transaccion.service';
 import { SharedService } from '../../core/services/shared.service';
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
+import { DatePicker } from 'primeng/datepicker';
+import { FloatLabel } from 'primeng/floatlabel';
 import { CommonModule } from '@angular/common';
 
 
@@ -19,45 +20,63 @@ interface Transaccion{
     valor: number;
 }
 
+//interface usada para la lista de despliegue
 interface Opciones {
     name: string;
 }
   
 @Component({
   selector: 'app-resumen',
-  imports: [ChartModule, Select, FormsModule, CommonModule],
+  imports: [
+    ChartModule, 
+    Select, 
+    FormsModule, 
+    CommonModule, 
+    DatePicker, 
+    FloatLabel
+],
   templateUrl: './resumen.component.html',
   styleUrl: './resumen.component.scss'
 })
+
 export class ResumenComponent implements OnInit {
 
     constructor(
-        private cd: ChangeDetectorRef,
-        private sharedService: SharedService,
-        private transaccionService: TransaccionService
+        private cd: ChangeDetectorRef, //usado en los graficos
+        private sharedService: SharedService, //requerido para obtener el correo del usuario
+        private transaccionService: TransaccionService //requerido para obtener la data de Activos, pasivos, ingresos y egresos
     ) {}
 
-    email: string = ""
+    // Variable fecha del selector inicializada con la fecha actual.
+    date = signal(new Date());
+    // Esta variable contiene la fecha maxima seleccionable para el selector de fecha en ingresos y egresos.
+    maxDate: Date | undefined;
+
+    email: string = "" // variable para correo del usuario
     listaActivos = signal<Transaccion[]>([]);
     listaPasivos = signal<Transaccion[]>([]);
     listaIngresos = signal<Transaccion[]>([]);
     listaEgresos = signal<Transaccion[]>([]);
     
+    //data y opciones para gráficos de Activos
     dataBarActivos: any;
     optionsBarActivos: any;
     dataPieActivos: any;
     optionsPieActivos: any;
 
+    //data y opciones para gráficos de Pasivos
     dataBarPasivos: any;
     optionsBarPasivos: any;
     dataPiePasivos: any;
     optionsPiePasivos: any;
 
+    //data y opciones para gráficos de Ingresos
     dataBarIngresos: any;
     optionsBarIngresos: any;
     dataPieIngresos: any;
     optionsPieIngresos: any;
 
+    //data y opciones para gráficos de Egresos
     dataBarEgresos: any;
     optionsBarEgresos: any;
     dataPieEgresos: any;
@@ -67,11 +86,12 @@ export class ResumenComponent implements OnInit {
     seccion: Opciones[] | undefined;
     tipoSeccion: Opciones | undefined;
 
-
     ngOnInit() {
         this.email = this.sharedService.getEmail() ?? "";
+        this.date.set(new Date());
+        this.maxDate = new Date();
 
-        //opciones de seccion:
+        //opciones de sección:
         this.seccion = [
             { name: 'activos' },
             { name: 'pasivos' },
@@ -80,36 +100,35 @@ export class ResumenComponent implements OnInit {
         ];
 
         this.transaccionService.getAllActivos(this.email).subscribe((data:any) => {
-            console.log("Datos recibidos del servicio: ", data);
-            this.listaActivos.set(data.message); // Asegúrate de que `data.message` contenga un array válido
-            console.log("listaActivos después de set: ", this.listaActivos());
+            this.listaActivos.set(data.message); // Datos recibidos del servicio, asegurarse de que `data.message` contenga un array válido
             this.initChartActivosBarras(); // Llama a initChart después de cargar los datos
             this.initChartActivosPie();
         }); 
 
         this.transaccionService.getAllPasivos(this.email).subscribe((data:any) => {
-            console.log("Datos recibidos del servicio: ", data);
-            this.listaPasivos.set(data.message); // Asegúrate de que `data.message` contenga un array válido
-            console.log("listaPasivos después de set: ", this.listaPasivos());
+            this.listaPasivos.set(data.message); // Datos recibidos del servicio, asegurarse de que `data.message` contenga un array válido
             this.initChartPasivosBarras(); // Llama a initChart después de cargar los datos
             this.initChartPasivosPie();
         });
 
         this.transaccionService.getAllIngresos(this.email).subscribe((data:any) => {
-            console.log("Datos recibidos del servicio: ", data);
-            this.listaIngresos.set(data.message); // Asegúrate de que `data.message` contenga un array válido
-            console.log("listaIngresos después de set: ", this.listaIngresos());
-            this.initChartIngresosBarras(); // Llama a initChart después de cargar los datos
-            this.initChartIngresosPie();
+            this.listaIngresos.set(data.message); // Datos recibidos del servicio, asegurarse de que `data.message` contenga un array válido
+             
         });
 
         this.transaccionService.getAllEgresos(this.email).subscribe((data:any) => {
-            console.log("Datos recibidos del servicio: ", data);
-            this.listaEgresos.set(data.message); // Asegúrate de que `data.message` contenga un array válido
-            console.log("listaEgresos después de set: ", this.listaEgresos());
-            this.initChartEgresosBarras(); // Llama a initChart después de cargar los datos
-            this.initChartEgresosPie();
+            this.listaEgresos.set(data.message); // Datos recibidos del servicio, asegurarse de que `data.message` contenga un array válido
         });
+    }
+
+    //Setear la fecha para filtrar la data por mes
+    filterMonth(dateMonth: Date){
+        this.date.set(dateMonth);
+        // Llama a initChart después de cargar los datos filtrados
+        this.initChartIngresosBarras(); 
+        this.initChartIngresosPie();
+        this.initChartEgresosBarras();
+        this.initChartEgresosPie();
     }
 
     // --------------------------- Grficos Activos ---------------------------
@@ -118,96 +137,85 @@ export class ResumenComponent implements OnInit {
         this.listaActivos().forEach((transaccion) => {
             categoryTotals[transaccion.nombre_categoria] = 
             (categoryTotals[transaccion.nombre_categoria] || 0) + transaccion.valor;
-            
         });
-        console.log("categoryTotals: ", categoryTotals)
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("labels: ", labels)
-        console.log("data: ", data)
         return categoryTotals;
-
     })
-
     
     initChartActivosBarras() {
-        //if (isPlatformBrowser(this.platformId)) {
-            const documentStyle = getComputedStyle(document.documentElement);
-            const textColor = documentStyle.getPropertyValue('--p-text-color');
-            const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
-            const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--p-text-color');
+        const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
+        const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
 
-            const categoryTotals = this.activos();
-            const labels = Object.keys(categoryTotals);
-            const data = Object.values(categoryTotals);
-            console.log("categoryTotals2: ", categoryTotals)
-            console.log("labels2: ", labels)
-            console.log("data2: ", data)
+        const categoryTotals = this.activos();
+        const labels = Object.keys(categoryTotals);
+        const data = Object.values(categoryTotals);
 
-            if (labels.length === 0 || data.length === 0) {
-                console.error("No hay datos para mostrar en el gráfico.");
-                return;
-            }
+        if (labels.length === 0 || data.length === 0) {
+            console.error("No hay datos para mostrar en el gráfico.");
+            return;
+        }
 
-            this.dataBarActivos = {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Activos',
-                        data: data,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 205, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(201, 203, 207, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(255, 159, 64)',
-                            'rgb(255, 205, 86)',
-                            'rgb(75, 192, 192)',
-                            'rgb(54, 162, 235)',
-                            'rgb(153, 102, 255)',
-                            'rgb(201, 203, 207)'
-                        ],
-                        borderWidth: 1,
-                    },
-                ],
-            };
+        this.dataBarActivos = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Activos',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1,
+                },
+            ],
+        };
 
-            this.optionsBarActivos = {
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: textColor,// Color del texto de la leyenda
-                        },
+        this.optionsBarActivos = {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor,// Color del texto de la leyenda
                     },
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: textColorSecondary,// Color de las etiquetas del eje X
-                        },
-                        grid: {
-                            color: surfaceBorder, // Color de las líneas de la cuadrícula
-                        },
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: textColorSecondary,// Color de las etiquetas del eje X
                     },
-                    y: {
-                        beginAtZero: true, // Comienza desde 0
-                        ticks: {
-                            color: textColorSecondary, // Color de las etiquetas del eje Y
-                        },
-                        grid: {
-                            color: surfaceBorder, // Color de las líneas de la cuadrícula
-                        },
+                    grid: {
+                        color: surfaceBorder, // Color de las líneas de la cuadrícula
                     },
                 },
-            };
-            this.cd.markForCheck()
-       // }
+                y: {
+                    beginAtZero: true, // Comienza desde 0
+                    ticks: {
+                        color: textColorSecondary, // Color de las etiquetas del eje Y
+                    },
+                    grid: {
+                        color: surfaceBorder, // Color de las líneas de la cuadrícula
+                    },
+                },
+            },
+        };
+        this.cd.markForCheck()
     }
 
     initChartActivosPie() {
@@ -217,9 +225,6 @@ export class ResumenComponent implements OnInit {
         const categoryTotals = this.activos();
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("categoryTotals2: ", categoryTotals)
-        console.log("labels2: ", labels)
-        console.log("data2: ", data)
 
         this.dataPieActivos = {
             labels: labels,
@@ -268,7 +273,6 @@ export class ResumenComponent implements OnInit {
             }
         };
         this.cd.markForCheck()
-
     }
 
     // --------------------------- Grficos Pasivos ---------------------------
@@ -280,13 +284,9 @@ export class ResumenComponent implements OnInit {
             (categoryTotals[transaccion.nombre_categoria] || 0) + transaccion.valor;
             
         });
-        console.log("categoryTotals: ", categoryTotals)
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("labels: ", labels)
-        console.log("data: ", data)
         return categoryTotals;
-
     })
 
     initChartPasivosBarras(){
@@ -298,9 +298,6 @@ export class ResumenComponent implements OnInit {
         const categoryTotals = this.pasivos();
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("categoryTotals2: ", categoryTotals)
-        console.log("labels2: ", labels)
-        console.log("data2: ", data)
 
         if (labels.length === 0 || data.length === 0) {
             console.error("No hay datos para mostrar en el gráfico.");
@@ -374,9 +371,6 @@ export class ResumenComponent implements OnInit {
         const categoryTotals = this.pasivos();
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("categoryTotals2: ", categoryTotals)
-        console.log("labels2: ", labels)
-        console.log("data2: ", data)
 
         this.dataPiePasivos= {
             labels: labels,
@@ -433,17 +427,17 @@ export class ResumenComponent implements OnInit {
     ingresos = computed(() => {
         const categoryTotals: { [key: string]: number } = {};
         this.listaIngresos().forEach((transaccion) => {
-            categoryTotals[transaccion.nombre_categoria] = 
-            (categoryTotals[transaccion.nombre_categoria] || 0) + transaccion.valor;
-            
+            //filtro por mes de la data antes de mostrarse en el grafico
+            const transactionDate = new Date(transaccion.fecha_transaccion);
+            if (transactionDate.getFullYear() === this.date().getFullYear() &&
+                transactionDate.getMonth() === this.date().getMonth()) {
+                    categoryTotals[transaccion.nombre_categoria] = 
+                    (categoryTotals[transaccion.nombre_categoria] || 0) + transaccion.valor;
+            }
         });
-        console.log("categoryTotals: ", categoryTotals)
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("labels: ", labels)
-        console.log("data: ", data)
         return categoryTotals;
-
     })
 
     initChartIngresosBarras(){
@@ -455,15 +449,7 @@ export class ResumenComponent implements OnInit {
         const categoryTotals = this.ingresos();
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("categoryTotals2: ", categoryTotals)
-        console.log("labels2: ", labels)
-        console.log("data2: ", data)
-
-        if (labels.length === 0 || data.length === 0) {
-            console.error("No hay datos para mostrar en el gráfico.");
-            return;
-        }
-
+       
         this.dataBarIngresos = {
             labels: labels,
             datasets: [
@@ -531,9 +517,6 @@ export class ResumenComponent implements OnInit {
         const categoryTotals = this.ingresos();
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("categoryTotals2: ", categoryTotals)
-        console.log("labels2: ", labels)
-        console.log("data2: ", data)
 
         this.dataPieIngresos= {
             labels: labels,
@@ -589,15 +572,16 @@ export class ResumenComponent implements OnInit {
     egresos = computed(() => {
         const categoryTotals: { [key: string]: number } = {};
         this.listaEgresos().forEach((transaccion) => {
-            categoryTotals[transaccion.nombre_categoria] = 
-            (categoryTotals[transaccion.nombre_categoria] || 0) + transaccion.valor;
-            
+            //filtro por mes de la data antes de mostrarse en el grafico
+            const transactionDate = new Date(transaccion.fecha_transaccion);
+            if (transactionDate.getFullYear() === this.date().getFullYear() &&
+                transactionDate.getMonth() === this.date().getMonth()) {
+                    categoryTotals[transaccion.nombre_categoria] = 
+                    (categoryTotals[transaccion.nombre_categoria] || 0) + transaccion.valor;
+            }
         });
-        console.log("categoryTotals: ", categoryTotals)
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("labels: ", labels)
-        console.log("data: ", data)
         return categoryTotals;
 
     })
@@ -611,15 +595,7 @@ export class ResumenComponent implements OnInit {
         const categoryTotals = this.egresos();
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("categoryTotals2: ", categoryTotals)
-        console.log("labels2: ", labels)
-        console.log("data2: ", data)
-
-        if (labels.length === 0 || data.length === 0) {
-            console.error("No hay datos para mostrar en el gráfico.");
-            return;
-        }
-
+        
         this.dataBarEgresos = {
             labels: labels,
             datasets: [
@@ -687,9 +663,6 @@ export class ResumenComponent implements OnInit {
         const categoryTotals = this.egresos();
         const labels = Object.keys(categoryTotals);
         const data = Object.values(categoryTotals);
-        console.log("categoryTotals2: ", categoryTotals)
-        console.log("labels2: ", labels)
-        console.log("data2: ", data)
 
         this.dataPieEgresos= {
             labels: labels,
@@ -740,6 +713,4 @@ export class ResumenComponent implements OnInit {
         this.cd.markForCheck()
 
     }
-    
-
 }

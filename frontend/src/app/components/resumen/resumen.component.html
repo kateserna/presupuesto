@@ -14,61 +14,84 @@
         class="w-full md:w-56" 
         />
 </div>
-
-<ng-container [ngSwitch]="tipoSeccion?.name">
+<div>
+    <ng-container [ngSwitch]="tipoSeccion?.name">
         <!-- graficos de activos -->
-    <div *ngSwitchCase="'activos'">
-        <h2>Gráficos Sección Activos</h2>
-        <div class="card-container" style="display: flex; gap: 20px; justify-content: space-between;">
-            <div class="card" style="flex: 1; max-width: 50%;">
-                <p-chart type="bar" [data]="dataBarActivos" [options]="optionsBarActivos"></p-chart>
-            </div>
-            <div class="card" style="flex: 1; max-width: 50%;">
-                <p-chart type="pie" [data]="dataPieActivos" [options]="optionsPieActivos"></p-chart>
-            </div>
-        </div>
-    </div>
-    <br>
-
-    <!-- graficos de pasivos -->
-    <div *ngSwitchCase="'pasivos'">
-        <h2>Gráficos Sección Pasivos</h2>
-        <div class="card-container" style="display: flex; gap: 20px; justify-content: space-between;">
-            <div class="card" style="flex: 1; max-width: 50%;">
-                <p-chart type="bar" [data]="dataBarPasivos" [options]="optionsBarPasivos"></p-chart>
-            </div>
-            <div class="card" style="flex: 1; max-width: 50%;">
-                <p-chart type="pie" [data]="dataPiePasivos" [options]="optionsPiePasivos"></p-chart>
+        <div *ngSwitchCase="'activos'">
+            <h2>Gráficos Sección Activos</h2>
+            <div class="card-container" style="display: flex; gap: 20px; justify-content: space-between;">
+                <div class="card" style="flex: 1; max-width: 50%;">
+                    <p-chart type="bar" [data]="dataBarActivos" [options]="optionsBarActivos"></p-chart>
+                </div>
+                <div class="card" style="flex: 1; max-width: 28%;">
+                    <p-chart type="pie" [data]="dataPieActivos" [options]="optionsPieActivos"></p-chart>
+                </div>
             </div>
         </div>
-    </div>
-    <br>
-
-    <!-- graficos de ingresos -->
-    <div *ngSwitchCase="'ingresos'">
-        <h2>Gráficos Sección Ingresos</h2>
-        <div class="card-container" style="display: flex; gap: 20px; justify-content: space-between;">
-            <div class="card" style="flex: 1; max-width: 50%;">
-                <p-chart type="bar" [data]="dataBarIngresos" [options]="optionsBarIngresos"></p-chart>
-            </div>
-            <div class="card" style="flex: 1; max-width: 50%;">
-                <p-chart type="pie" [data]="dataPieIngresos" [options]="optionsPieIngresos"></p-chart>
+        <!-- graficos de pasivos -->
+        <div *ngSwitchCase="'pasivos'">
+            <h2>Gráficos Sección Pasivos</h2>
+            <div class="card-container" style="display: flex; gap: 20px; justify-content: space-between;">
+                <div class="card" style="flex: 1; max-width: 50%;">
+                    <p-chart type="bar" [data]="dataBarPasivos" [options]="optionsBarPasivos"></p-chart>
+                </div>
+                <div class="card" style="flex: 1; max-width: 28%;">
+                    <p-chart type="pie" [data]="dataPiePasivos" [options]="optionsPiePasivos"></p-chart>
+                </div>
             </div>
         </div>
-    </div>
-    <br>
-
-    <!-- graficos de egresos -->
-    <div *ngSwitchCase="'egresos'">
-        <h2>Gráficos Sección Egresos</h2>
-        <div class="card-container" style="display: flex; gap: 20px; justify-content: space-between;">
-            <div class="card" style="flex: 1; max-width: 50%;">
-                <p-chart type="bar" [data]="dataBarEgresos" [options]="optionsBarEgresos"></p-chart>
-            </div>
-            <div class="card" style="flex: 1; max-width: 50%;">
-                <p-chart type="pie" [data]="dataPieEgresos" [options]="optionsPieEgresos"></p-chart>
+        <!-- graficos de ingresos -->
+        <div *ngSwitchCase="'ingresos'">
+            <h2>Gráficos Sección Ingresos</h2>
+            <p-floatlabel variant="in">
+                <p-datepicker 
+                    [(ngModel)]="date"
+                    view="month"
+                    dateFormat="mm/yy"
+                    [maxDate]="maxDate"
+                    [readonlyInput]="true"
+                    showIcon="true"
+                    inputId="filtroMes"
+                    (ngModelChange)="filterMonth($event)"
+                />
+                <label for="filtroMes">Filtrar mes</label>
+            </p-floatlabel>
+            <br>
+            <div class="card-container" style="display: flex; gap: 20px; justify-content: space-between;">
+                <div class="card" style="flex: 1; max-width: 50%;">
+                    <p-chart type="bar" [data]="dataBarIngresos" [options]="optionsBarIngresos"></p-chart>
+                </div>
+                <div class="card" style="flex: 1; max-width: 28%;">
+                    <p-chart type="pie" [data]="dataPieIngresos" [options]="optionsPieIngresos"></p-chart>
+                </div>
             </div>
         </div>
-    </div>
-    <br>
-</ng-container>
+        <!-- graficos de egresos -->
+        <div *ngSwitchCase="'egresos'">
+            <h2>Gráficos Sección Egresos</h2>
+            <p-floatlabel variant="in">
+                <p-datepicker 
+                    [(ngModel)]="date"
+                    view="month"
+                    dateFormat="mm/yy"
+                    [maxDate]="maxDate"
+                    [readonlyInput]="true"
+                    showIcon="true"
+                    inputId="filtroMes"
+                    (ngModelChange)="filterMonth($event)"
+                />
+                <label for="filtroMes">Filtrar mes</label>
+            </p-floatlabel>
+            <br>
+            <div class="card-container" style="display: flex; gap: 20px; justify-content: space-between;">
+                    <div class="card" style="flex: 1; max-width: 50%;">
+                        <p-chart type="bar" [data]="dataBarEgresos" [options]="optionsBarEgresos"></p-chart>
+                    </div>
+                <div class="card" style="flex: 1; max-width: 28%;">
+                    <p-chart type="pie" [data]="dataPieEgresos" [options]="optionsPieEgresos"></p-chart>
+                </div>
+            </div>
+        </div>
+        <br>
+    </ng-container>
+</div>
