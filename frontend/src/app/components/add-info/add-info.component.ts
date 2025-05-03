@@ -10,7 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import e from 'express';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 interface Opciones {
   name: string;
@@ -38,16 +39,19 @@ interface Transaccion{
     InputTextModule,
     DatePickerModule,
     ButtonModule, 
-    CommonModule
+    CommonModule,
+    Toast,
   ],
   templateUrl: './add-info.component.html',
-  styleUrl: './add-info.component.scss'
+  styleUrl: './add-info.component.scss',
+  providers: [MessageService],
 })
 
 export class AddInfoComponent implements OnInit {
   constructor(
       private sharedService: SharedService, 
       private transaccionService: TransaccionService,
+      private messageService: MessageService
     ) {}
 
   email: string = ""
@@ -79,7 +83,7 @@ export class AddInfoComponent implements OnInit {
 
   valor: number | undefined;
   descripcion = ('');
-  
+  valorError: boolean = false; // Track validation error for 'valor'
 
   ngOnInit() {
 
@@ -144,6 +148,10 @@ export class AddInfoComponent implements OnInit {
 
   }
 
+  showError(mensaje: string) {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: mensaje });
+  }
+
   //revisar metdo fecha si este dando
   setDateTransaccion(dateTransaccion: Date){
     this.dateTransaccion = dateTransaccion;
@@ -179,11 +187,11 @@ export class AddInfoComponent implements OnInit {
 
   setValor(valor:number){
     if(valor <= 0){
-      alert("El valor no puede ser negativo o cero");
+      this.showError("El valor no puede ser negativo o cero");
       return;
     }
     this.valor = valor;
-    console.log("valor: ", this.valor)
+    console.log("valor: ", this.valor);
   }
 
   setDescrpcion(descripcion:string){
@@ -203,7 +211,7 @@ export class AddInfoComponent implements OnInit {
   //metodo para crear registro:
   addTransaccion(){
     if(this.dateTransaccion === undefined){
-      alert("Error: no ha seleccionado una fecha");
+      this.showError("No ha seleccionado una fecha");
       return;
     }
     
@@ -211,34 +219,34 @@ export class AddInfoComponent implements OnInit {
     if(this.tipoSeccion?.name === "activos"){
       categoria = this.selectCatActivos?.name ?? ''
       if(this.selectCatActivos?.name === undefined){
-        alert("Error: no ha seleccionado una categoría");
+        this.showError("No ha seleccionado una categoría");
         return;
       }
     }else if(this.tipoSeccion?.name === "pasivos"){
       categoria = this.selectCatPasivos?.name ?? ''
       if(this.selectCatPasivos?.name === undefined){
-        alert("Error: no ha seleccionado una categoría");
+        this.showError("No ha seleccionado una categoría");
         return;
       }
     }else if(this.tipoSeccion?.name === "ingresos"){
       categoria = this.selectCatIngresos?.name ?? ''
       if(this.selectCatIngresos?.name === undefined){
-        alert("Error: no ha seleccionado una categoría");
+        this.showError("No ha seleccionado una categoría");
         return;
       }
     }else if(this.tipoSeccion?.name === "egresos"){
       categoria = this.selectCatEgresos?.name ?? ''
       if(this.selectCatEgresos?.name === undefined){
-        alert("Error: no ha seleccionado una categoría");
+        this.showError("No ha seleccionado una categoría");
         return;
       } 
     }else{
-      alert("Error: no ha seleccionado una sección");
+      this.showError("No ha seleccionado una sección");
       return; 
     }
     
     if(this.valor === undefined || this.valor <= 0){
-      alert("Error: el valor no puede ser negativo o cero");
+      this.showError("El valor no puede ser negativo o cero");
       return;
     }
 
@@ -262,11 +270,11 @@ export class AddInfoComponent implements OnInit {
           return [...historial, newTransaccion];
         }
       );
-      alert("Registro creado correctamente");
+      this.messageService.add({ severity: 'success', summary: '¡Felicidades!', detail: "Registro creado correctamente" });
       this.clearForm();
       },
       error: (err: any) => {
-      alert("Error al crear el registro: " + err.error.message);
+        this.showError("Error al crear el registro.");
       }
       
     });
