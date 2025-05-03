@@ -7,6 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { DatePicker } from 'primeng/datepicker';
 import { FloatLabel } from 'primeng/floatlabel';
 import { DecimalPipe, DatePipe } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 interface Transaccion{
   id: number;
@@ -28,22 +32,30 @@ interface Transaccion{
     DatePicker,
     FloatLabel,
     DecimalPipe, 
-    DatePipe 
+    DatePipe,
+    ButtonModule,
+    ToastModule,
+    ConfirmPopupModule 
   ],
   templateUrl: './egresos.component.html',
-  styleUrl: './egresos.component.scss'
+  styleUrl: './egresos.component.scss',
+  providers: [MessageService, ConfirmationService],
+
 })
 export class EgresosComponent implements OnInit{
   
   constructor(
     private transaccionService: TransaccionService,
     private sharedService: SharedService,
+    private confirmationService: ConfirmationService, 
+    private messageService: MessageService
   ) {}
 
   date = signal(new Date());
   maxDate: Date | undefined;
   email: string = ""
   listaEgresos = signal<Transaccion[]>([]);
+  id: number = 0;
   
   ngOnInit(): void {
     this.email = this.sharedService.getEmail() ?? "";
@@ -56,6 +68,7 @@ export class EgresosComponent implements OnInit{
     })
   }
 
+  ///actualizar fecha para filtro por mes
   filterMonth(dateMonth: Date){
     this.date.set(dateMonth);
     console.log("Updated date 1:", this.date());
@@ -72,6 +85,7 @@ export class EgresosComponent implements OnInit{
         });
   })
 
+  //calcular total de egresos por mes
   totalEgresos = computed( () => {
     return this.listaEgresos().reduce((total, egresos) => {
       const transactionDate = new Date(egresos.fecha_transaccion);
@@ -84,5 +98,45 @@ export class EgresosComponent implements OnInit{
       return total;
     }, 0);
   })
+
+  //eliminar transaccion
+  deleteEgresos(id: number){
+    const result = this.transaccionService.deleteTransaccion(id).subscribe({
+      next: (data: any) => {
+        console.log("id: ", id)
+        console.log("eliminado: ",data)
+        this.listaEgresos.set(this.listaEgresos().filter((egresos) => egresos.id !== id));
+      },
+      error: (err) => {
+        console.error("Error al eliminar la transacción: ", err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la transacción.' });
+      }
+    });
+  }
+
+  //confirmar eliminacion de transaccion
+  confirmDelete(event: Event, id : number) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: '¿Está seguro que desea eliminar este registro?',
+        icon: 'pi pi-exclamation-triangle',
+        rejectButtonProps: {
+            label: 'Cancelar',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptButtonProps: {
+            label: 'Eliminar',
+            severity: 'danger'
+        },
+        accept: () => {
+            this.deleteEgresos(id);
+            this.messageService.add({ severity: 'success', summary: 'Confirmado', detail: 'Transacción eliminada correctamente.', life: 3000 });
+        },
+        reject: () => {
+            this.messageService.add({ severity: 'error', summary: 'Rechazado', detail: 'Ha cancelado la eliminación del registro.', life: 3000 });
+        }
+    });
+  }
   
 }

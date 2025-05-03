@@ -115,6 +115,7 @@ export class IngresosComponent implements OnInit{
     });
   }
 
+  //confirmar eliminacion de transaccion
   confirmDelete(event: Event, id : number) {
     this.confirmationService.confirm({
         target: event.target as EventTarget,
