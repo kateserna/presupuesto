@@ -211,7 +211,7 @@ export class AddInfoComponent implements OnInit {
   //metodo para crear registro:
   addTransaccion(){
     if(this.dateTransaccion === undefined){
-      this.showError("No ha seleccionado una fecha");
+      this.showError("No ha seleccionado una fecha.");
       return;
     }
     
@@ -219,34 +219,34 @@ export class AddInfoComponent implements OnInit {
     if(this.tipoSeccion?.name === "activos"){
       categoria = this.selectCatActivos?.name ?? ''
       if(this.selectCatActivos?.name === undefined){
-        this.showError("No ha seleccionado una categoría");
+        this.showError("No ha seleccionado una categoría.");
         return;
       }
     }else if(this.tipoSeccion?.name === "pasivos"){
       categoria = this.selectCatPasivos?.name ?? ''
       if(this.selectCatPasivos?.name === undefined){
-        this.showError("No ha seleccionado una categoría");
+        this.showError("No ha seleccionado una categoría.");
         return;
       }
     }else if(this.tipoSeccion?.name === "ingresos"){
       categoria = this.selectCatIngresos?.name ?? ''
       if(this.selectCatIngresos?.name === undefined){
-        this.showError("No ha seleccionado una categoría");
+        this.showError("No ha seleccionado una categoría.");
         return;
       }
     }else if(this.tipoSeccion?.name === "egresos"){
       categoria = this.selectCatEgresos?.name ?? ''
       if(this.selectCatEgresos?.name === undefined){
-        this.showError("No ha seleccionado una categoría");
+        this.showError("No ha seleccionado una categoría.");
         return;
       } 
     }else{
-      this.showError("No ha seleccionado una sección");
+      this.showError("No ha seleccionado una sección.");
       return; 
     }
     
     if(this.valor === undefined || this.valor <= 0){
-      this.showError("El valor no puede ser negativo o cero");
+      this.showError("El valor no puede ser negativo o cero.");
       return;
     }
 
@@ -270,7 +270,7 @@ export class AddInfoComponent implements OnInit {
           return [...historial, newTransaccion];
         }
       );
-      this.messageService.add({ severity: 'success', summary: '¡Felicidades!', detail: "Registro creado correctamente" });
+      this.messageService.add({ severity: 'success', summary: '¡Felicidades!', detail: "Registro creado correctamente." });
       this.clearForm();
       },
       error: (err: any) => {
