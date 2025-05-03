@@ -1,6 +1,8 @@
 
 <div class="flex items-center justify-center h-full">
     <p-card [style]="{ overflow: 'hidden' }">
+        <p-toast />
+        <p-confirmpopup />
         <br>
         <br>
         <h2>Lista de Activos</h2>
@@ -30,7 +32,7 @@
                                 [raised]="true"
                                 [outlined]="true"
                                 styleClass="w-full"
-                                (click)="deleteActivos(activos.id)"
+                                (click)="confirmDelete($event, activos.id)"
                             /> 
                         </td>
                         
