@@ -1,5 +1,7 @@
 <div class="flex items-center justify-center h-full">
     <p-card [style]="{ overflow: 'hidden' }">
+        <p-toast />
+        <p-confirmpopup />
         <br>
         <br>
         <h2>Lista de Pasivos</h2>
@@ -11,6 +13,7 @@
                 <th>Categoría</th>
                 <th>Descripción</th>
                 <th>Valor</th>
+                <th> </th>
             </tr>
         </ng-template>
         <ng-template #body let-pasivos>
@@ -19,11 +22,20 @@
                 <td>{{pasivos.nombre_categoria}}</td>
                 <td>{{pasivos.descripcion}}</td>
                 <td>{{pasivos.valor | number: '1.0-2'}}</td>
+                <td>
+                    <p-button
+                        label="Eliminar"
+                        severity="danger"
+                        class="w-full"
+                        [raised]="true"
+                        [outlined]="true"
+                        styleClass="w-full"
+                        (click)="confirmDelete($event, pasivos.id)"
+                    /> 
+                </td>
             </tr>
-
         </ng-template>
     </p-table>
     <h3>Total Pasivos: {{ totalPasivos() | number: '1.0-2' }}</h3>
     </p-card>
-    
 </div>

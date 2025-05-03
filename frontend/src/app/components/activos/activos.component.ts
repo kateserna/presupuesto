@@ -62,6 +62,26 @@ export class ActivosComponent implements OnInit{
 
   }
 
+  //devuelve las transacciones tipo activos de la tabla a traves del servicio
+  allActivos = computed(() => {
+    console.log("fecha transaccion:", this.listaActivos())
+    return this.listaActivos()
+  })
+
+  deleteActivos(id: number){
+    const result = this.transaccionService.deleteTransaccion(id).subscribe({
+      next: (data: any) => {
+        console.log("id: ", id)
+        console.log("eliminado: ",data)
+        this.listaActivos.set(this.listaActivos().filter((activos) => activos.id !== id));
+      },
+      error: (err) => {
+        console.error("Error al eliminar la transacción: ", err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la transacción.' });
+      }
+    });
+  }
+
   confirmDelete(event: Event, id : number) {
     this.confirmationService.confirm({
         target: event.target as EventTarget,
@@ -84,25 +104,6 @@ export class ActivosComponent implements OnInit{
             this.messageService.add({ severity: 'error', summary: 'Rechazado', detail: 'Ha cancelado la eliminación del registro.', life: 3000 });
         }
     });
-}
-
-  //devuelve las transacciones tipo activos de la tabla a traves del servicio
-  allActivos = computed(() => {
-    console.log("fecha transaccion:", this.listaActivos())
-    return this.listaActivos()
-  })
-
-  deleteActivos(id: number){
-    const result = this.transaccionService.deleteTransaccion(id).subscribe({
-      next: (data: any) => {
-        console.log("id: ", id)
-        console.log("eliminado: ",data)
-        this.listaActivos.set(this.listaActivos().filter((activos) => activos.id !== id));
-      },
-      error: (err) => {
-        console.error("Error al eliminar la transacción: ", err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la transacción.' });
-      }
-    });
   }
+
 }
