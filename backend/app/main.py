@@ -7,6 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import create_engine, sql
 from uvicorn import run
+import os
+from dotenv import load_dotenv
 
 # Habilitar CORS
 origins = [
@@ -46,9 +48,19 @@ class resultado:
     status: int
     total: int
 
+# Cargar las variables de entorno desde el archivo .env
+load_dotenv("backend/.env")
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_NAME = os.getenv("DB_NAME")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+
 # Abrir la conexión a la base de datos PostgreSQL
-#DATABASE_URL = "postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-DATABASE_URL = "postgresql://postgres:31109806@localhost/presupuestodb"
+DATABASE_URL = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+#DATABASE_URL = "postgresql://postgres:31109806@localhost/presupuestodb"
+
 engine = create_engine(DATABASE_URL)
 
 def create_stmt_select(filter = ""):
