@@ -1,5 +1,7 @@
 <div class="flex items-center justify-center h-full">
     <p-card>
+        <p-toast />
+        <p-confirmpopup />
         <h2>Lista de Ingresos</h2>
         <div class="justify-right">
             <p>Filtro mensual para Ingresos:</p>
@@ -25,6 +27,7 @@
                     <th>Categoría</th>
                     <th>Descripción</th>
                     <th>Valor</th>
+                    <th> </th>
                 </tr>
             </ng-template>
             <ng-template #body let-ingresos>
@@ -33,6 +36,17 @@
                     <td>{{ingresos.nombre_categoria}}</td>
                     <td>{{ingresos.descripcion}}</td>
                     <td>{{ingresos.valor | number: '1.0-2'}}</td>
+                    <td>
+                        <p-button
+                                label="Eliminar"
+                                severity="danger"
+                                class="w-full"
+                                [raised]="true"
+                                [outlined]="true"
+                                styleClass="w-full"
+                                (click)="confirmDelete($event, ingresos.id)"
+                            /> 
+                    </td>
                 </tr>
 
             </ng-template>
