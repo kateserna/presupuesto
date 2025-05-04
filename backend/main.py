@@ -10,9 +10,9 @@ from app.models import Transacciones
 origins = [
     "http://localhost",
     "http://127.0.0.1",
-    "http://localhost:4200",  # Example frontend URL
-    "http://127.0.0.1:4200",  # Example frontend URL
-    "http://localhost:8000",  # Example frontend URL
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+    "http://localhost:8000",
     "http://127.0.0.1:8000",
 ]
 
@@ -25,7 +25,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=[
         "*"
-    ],  # TODO: cambiar a ["GET", "POST", "DELETE", "PUT"] cuando se implemente el login
+    ],
     allow_headers=["*"],
 )
 
