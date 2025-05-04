@@ -23,7 +23,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"], #TODO: cambiar a ["GET", "POST", "DELETE", "PUT"] cuando se implemente el login
+    allow_methods=[
+        "*"
+    ],  # TODO: cambiar a ["GET", "POST", "DELETE", "PUT"] cuando se implemente el login
     allow_headers=["*"],
 )
 

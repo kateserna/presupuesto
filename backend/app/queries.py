@@ -3,7 +3,7 @@ from app.models import resultado, Transacciones
 from app.conexion import engine
 
 
-#Crea una consulta SQL SELECT para obtener información de transacciones de un usuario. 
+# Crea una consulta SQL SELECT para obtener información de transacciones de un usuario.
 def create_stmt_select() -> sql:
     basic_stmt = """
                 SELECT transacciones.id, usuario, correo_electronico, valor, fecha_transaccion, descripcion, nombre_categoria, tipo 
@@ -47,10 +47,13 @@ def create_stmt_delete() -> sql:
     return sql.text(basic_stmt)
 
 
-# Función para obtener las transacciones de un  usuario por tipo. 
+# Función para obtener las transacciones de un  usuario por tipo.
 def get_transaccion(correo_electronico: str, tipo: str) -> resultado:
     with engine.connect() as conn:
-        result = conn.execute(create_stmt_select(), {"tipo": tipo, "correo_electronico": correo_electronico}).fetchall()
+        result = conn.execute(
+            create_stmt_select(),
+            {"tipo": tipo, "correo_electronico": correo_electronico},
+        ).fetchall()
 
     # Validación si result es vacío
     if len(result) == 0:
@@ -62,19 +65,24 @@ def get_transaccion(correo_electronico: str, tipo: str) -> resultado:
         lista_transacciones.append(
             Transacciones(
                 id=row[0],
-                usuario = row[1],
-                correo_electronico = row[2],
-                valor = row[3],
+                usuario=row[1],
+                correo_electronico=row[2],
+                valor=row[3],
                 # Convertir a formato 'YYYY-MM' sin leading zeros
-                fecha_transaccion = row[4].strftime("%Y-%m-%d").replace('-0', '-'),
-                descripcion = row [5],
-                nombre_categoria = row[6],
-                tipo = row[7],
+                fecha_transaccion=row[4].strftime("%Y-%m-%d").replace("-0", "-"),
+                descripcion=row[5],
+                nombre_categoria=row[6],
+                tipo=row[7],
             )
         )
         total += row[3]
-        
-    return resultado(f"Se encontraron {len(lista_transacciones)} {tipo}", lista_transacciones, 200, total)
+
+    return resultado(
+        f"Se encontraron {len(lista_transacciones)} {tipo}",
+        lista_transacciones,
+        200,
+        total,
+    )
 
 
 def _add_transaccion(transaccion: Transacciones) -> dict:
@@ -88,7 +96,7 @@ def _add_transaccion(transaccion: Transacciones) -> dict:
                 "valor": transaccion.valor,
                 "fecha_transaccion": transaccion.fecha_transaccion,
                 "descripcion": transaccion.descripcion,
-            }
+            },
         )
         conn.commit()
 
@@ -96,7 +104,8 @@ def _add_transaccion(transaccion: Transacciones) -> dict:
         if result.rowcount == 0:
             return {"mensaje": "No se insertó la transacción"}
 
-    return {"mensaje":"Nueva transacción insertada correctamente"}
+    return {"mensaje": "Nueva transacción insertada correctamente"}
+
 
 def _delete_transaccion(id_transaccion: int) -> dict:
     with engine.connect() as conn:
@@ -105,6 +114,6 @@ def _delete_transaccion(id_transaccion: int) -> dict:
 
         # Validación si result es vacío
         if result.rowcount == 0:
-            return {"mensaje":"No se encontró la transacción"}
+            return {"mensaje": "No se encontró la transacción"}
 
-    return {"mensaje":"Transacción eliminada"}
+    return {"mensaje": "Transacción eliminada"}
