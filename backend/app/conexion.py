@@ -13,4 +13,11 @@ DB_PORT = os.getenv("DB_PORT")
 
 # Abrir la conexión a la base de datos PostgreSQL
 DATABASE_URL = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-engine = create_engine(DATABASE_URL)
+
+try:
+    engine = create_engine(DATABASE_URL)
+    print("Conexión exitosa a la base de datos: {DATABASE_URL}")
+except Exception as e:
+    engine = None
+    print("URL: {DATABASE_URL}")
+    print(f"Error al conectar a la base de datos: {e}")
