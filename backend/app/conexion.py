@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
 # Cargar las variables de entorno desde el archivo .env
-load_dotenv("./backend/.env")
+load_dotenv(".env")
 
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
