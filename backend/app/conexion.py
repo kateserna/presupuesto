@@ -16,8 +16,8 @@ DATABASE_URL = f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{D
 
 try:
     engine = create_engine(DATABASE_URL)
-    print("Conexión exitosa a la base de datos: {DATABASE_URL}")
+    print(f"Conexión exitosa a la base de datos: {DATABASE_URL}")
 except Exception as e:
     engine = None
-    print("URL: {DATABASE_URL}")
+    print(f"URL: {DATABASE_URL}")
     print(f"Error al conectar a la base de datos: {e}")
