@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
 
-from app.queries import get_transaccion, _add_transaccion, _delete_transaccion
+from app.queries import _get_transacciones, get_transaccion, _add_transaccion, _delete_transaccion
 from app.models import Transacciones
 
 
@@ -25,6 +25,11 @@ app.add_middleware(
     ],
     allow_headers=["*"],
 )
+
+
+@app.get("/transacciones")
+async def get_transacciones():
+    return _get_transacciones()
 
 
 @app.get("/activos/{correo_electronico}")

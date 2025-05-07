@@ -47,6 +47,21 @@ def create_stmt_delete() -> sql:
     return sql.text(basic_stmt)
 
 
+def _get_transacciones() -> resultado:
+    with engine.connect() as conn:
+        result = conn.execute(sql.text("SELECT * FROM transacciones;")).fetchall()
+
+    if len(result) == 0:
+        return resultado(f"No se encontraron datos", [], 204, 0)
+
+    return resultado(
+        f"Se encontraron {len(result)} transacciones",
+        [],
+        200,
+        len(result),
+    )
+
+
 # Función para obtener las transacciones de un  usuario por tipo.
 def get_transaccion(correo_electronico: str, tipo: str) -> resultado:
     with engine.connect() as conn:
