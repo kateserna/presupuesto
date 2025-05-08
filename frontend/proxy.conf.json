@@ -1,0 +1,10 @@
+{
+    "/api": {
+      "target": "http://ec2-18-223-99-46.us-east-2.compute.amazonaws.com:8000",
+      "secure": false,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/api": ""
+      }
+    }
+  }

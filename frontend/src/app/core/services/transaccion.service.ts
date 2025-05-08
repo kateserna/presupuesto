@@ -6,8 +6,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TransaccionService {
 
-  private URLBase = 'http://localhost:8000';
+  private URLBase = '/api'; //'http://ec2-18-223-99-46.us-east-2.compute.amazonaws.com:8000'
 
+  //http://localhost:8000
+  
   constructor(private http: HttpClient) { }
 
   getAllActivos(email:string){
