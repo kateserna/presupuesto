@@ -8,9 +8,10 @@ from app.models import Transacciones
 
 # Habilitar CORS
 origins = [
-    "http://localhost:4200",
-    "http://127.0.0.1:4200",
-    "https://staging.d19ueo6r87db2f.amplifyapp.com/",  # Este es el dominio del frontend en AWS Amplify
+    "*",
+    # "http://localhost:4200",
+    # "http://127.0.0.1:4200",
+    # "https://staging.d19ueo6r87db2f.amplifyapp.com/",  # Este es el dominio del frontend en AWS Amplify
 ]
 
 app = FastAPI()
@@ -25,11 +26,6 @@ app.add_middleware(
     ],
     allow_headers=["*"],
 )
-
-
-@app.get("/transacciones")
-async def get_transacciones():
-    return _get_transacciones()
 
 
 @app.get("/activos/{correo_electronico}")
