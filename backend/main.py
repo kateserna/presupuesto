@@ -39,6 +39,9 @@ async def get_activos(correo_electronico: str):
 
 @app.get("/api/pasivos/{correo_electronico}")
 async def get_pasivos(correo_electronico: str):
+    print("backend activos correo:", correo_electronico)
+    print("backend activos:", get_transaccion(correo_electronico, "pasivos"))
+    
     return get_transaccion(correo_electronico, "pasivos")
 
 

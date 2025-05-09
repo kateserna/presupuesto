@@ -62,7 +62,10 @@ export class DashboardComponent implements OnInit{
 
     this.transaccionService.getAllActivos(this.email).subscribe((data:any) => {
       this.listaActivos.set(data.message);
+      console.log("correo desde el servicio:", this.email);
+      console.log("data activos desde el servicio:", data.message);
       this.totalActivos.set(data.total)
+      console.log("total activos desde el servicio:", this.totalActivos());
     })
 
     this.transaccionService.getAllPasivos(this.email).subscribe( (data: any) => {
@@ -85,6 +88,7 @@ export class DashboardComponent implements OnInit{
 
   //devuelve las transacciones tipo activos de la tabla a traves del servicio
   allActivos = computed(() => {
+    console.log("lista activos desde allActivos:", this.listaActivos());
     return this.listaActivos()
   })
 
