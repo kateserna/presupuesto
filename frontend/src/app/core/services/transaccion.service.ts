@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TransaccionService {
 
-  private URLBase = '/api'; //'http://ec2-18-223-99-46.us-east-2.compute.amazonaws.com:8000/api'
+  private URLBase = 'https://e6a5-18-223-99-46.ngrok-free.app/api';//'http://ec2-18-223-99-46.us-east-2.compute.amazonaws.com:8000/api'
 
   //http://localhost:8000
   

@@ -11,6 +11,7 @@ origins = [
     "http://localhost:4200",
     "http://127.0.0.1:4200",
     "https://staging.d19ueo6r87db2f.amplifyapp.com",  # Este es el dominio del frontend en AWS Amplify
+    "https://e6a5-18-223-99-46.ngrok-free.app/api"
 ] 
 
 app = FastAPI()
